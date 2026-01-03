@@ -48,6 +48,9 @@ type Client struct {
 
 	// Tools provides access to the Tools API.
 	Tools *ToolsService
+
+	// Agents provides access to the Agents API.
+	Agents *AgentsService
 }
 
 // ClientConfig holds configuration for the SDK client.
@@ -231,6 +234,7 @@ func newClient(config *ClientConfig) (*Client, error) {
 	c.WebSearch = newWebSearchService(baseClient)
 	c.Moderations = newModerationsService(baseClient)
 	c.Tools = newToolsService(baseClient)
+	c.Agents = newAgentsService(baseClient)
 
 	return c, nil
 }
