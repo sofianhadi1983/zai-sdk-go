@@ -42,6 +42,11 @@ type Message struct {
 }
 
 // NewUserMessage creates a new user message with text content.
+//
+// Example:
+//
+//	msg := chat.NewUserMessage("Hello, how are you?")
+//	messages := []chat.Message{msg}
 func NewUserMessage(content string) Message {
 	return Message{
 		Role:    RoleUser,
@@ -50,6 +55,14 @@ func NewUserMessage(content string) Message {
 }
 
 // NewSystemMessage creates a new system message.
+//
+// System messages are used to set the behavior and context
+// for the AI assistant.
+//
+// Example:
+//
+//	msg := chat.NewSystemMessage("You are a helpful assistant.")
+//	messages := []chat.Message{msg}
 func NewSystemMessage(content string) Message {
 	return Message{
 		Role:    RoleSystem,
@@ -58,6 +71,14 @@ func NewSystemMessage(content string) Message {
 }
 
 // NewAssistantMessage creates a new assistant message.
+//
+// Assistant messages represent previous responses from the AI
+// and are used to maintain conversation history.
+//
+// Example:
+//
+//	msg := chat.NewAssistantMessage("I'm doing well, thank you!")
+//	messages := append(messages, msg)
 func NewAssistantMessage(content string) Message {
 	return Message{
 		Role:    RoleAssistant,
@@ -66,6 +87,16 @@ func NewAssistantMessage(content string) Message {
 }
 
 // NewToolMessage creates a new tool response message.
+//
+// Tool messages are used to provide the result of a function/tool
+// call back to the model.
+//
+// Example:
+//
+//	// After model requests a tool call with ID "call_123"
+//	result := `{"temperature": 72, "condition": "sunny"}`
+//	msg := chat.NewToolMessage("call_123", result)
+//	messages := append(messages, msg)
 func NewToolMessage(toolCallID, content string) Message {
 	return Message{
 		Role:       RoleTool,
@@ -96,6 +127,19 @@ type ImageURL struct {
 }
 
 // NewTextContentPart creates a new text content part.
+//
+// Used for creating multimodal messages that combine text and images.
+//
+// Example:
+//
+//	content := []chat.ContentPart{
+//	    chat.NewTextContentPart("What's in this image?"),
+//	    chat.NewImageContentPart("https://example.com/image.jpg"),
+//	}
+//	msg := chat.Message{
+//	    Role:    chat.RoleUser,
+//	    Content: content,
+//	}
 func NewTextContentPart(text string) ContentPart {
 	return ContentPart{
 		Type: "text",
@@ -104,6 +148,19 @@ func NewTextContentPart(text string) ContentPart {
 }
 
 // NewImageContentPart creates a new image content part.
+//
+// Used for sending images to vision-capable models for analysis.
+//
+// Example:
+//
+//	content := []chat.ContentPart{
+//	    chat.NewTextContentPart("Describe this image"),
+//	    chat.NewImageContentPart("https://example.com/photo.jpg"),
+//	}
+//	msg := chat.Message{
+//	    Role:    chat.RoleUser,
+//	    Content: content,
+//	}
 func NewImageContentPart(url string) ContentPart {
 	return ContentPart{
 		Type: "image_url",
@@ -135,6 +192,22 @@ type FunctionCall struct {
 }
 
 // GetArguments parses the function arguments into the given struct.
+//
+// This method unmarshals the JSON-encoded arguments from a function
+// call into a Go struct for easier access.
+//
+// Example:
+//
+//	type WeatherArgs struct {
+//	    Location string `json:"location"`
+//	    Unit     string `json:"unit"`
+//	}
+//
+//	var args WeatherArgs
+//	if err := functionCall.GetArguments(&args); err != nil {
+//	    log.Fatal(err)
+//	}
+//	fmt.Printf("Location: %s, Unit: %s\n", args.Location, args.Unit)
 func (fc *FunctionCall) GetArguments(v interface{}) error {
 	return json.Unmarshal([]byte(fc.Arguments), v)
 }
@@ -161,6 +234,32 @@ type ToolFunction struct {
 }
 
 // NewFunctionTool creates a new function tool.
+//
+// Function tools allow the model to call external functions to perform
+// tasks or retrieve information.
+//
+// Example:
+//
+//	parameters := map[string]interface{}{
+//	    "type": "object",
+//	    "properties": map[string]interface{}{
+//	        "location": map[string]interface{}{
+//	            "type":        "string",
+//	            "description": "City name, e.g., San Francisco",
+//	        },
+//	        "unit": map[string]interface{}{
+//	            "type": "string",
+//	            "enum": []string{"celsius", "fahrenheit"},
+//	        },
+//	    },
+//	    "required": []string{"location"},
+//	}
+//
+//	tool := chat.NewFunctionTool(
+//	    "get_weather",
+//	    "Get the current weather in a given location",
+//	    parameters,
+//	)
 func NewFunctionTool(name, description string, parameters interface{}) Tool {
 	return Tool{
 		Type: "function",
