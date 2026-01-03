@@ -45,6 +45,9 @@ type Client struct {
 
 	// Moderations provides access to the Moderations API.
 	Moderations *ModerationsService
+
+	// Tools provides access to the Tools API.
+	Tools *ToolsService
 }
 
 // ClientConfig holds configuration for the SDK client.
@@ -227,6 +230,7 @@ func newClient(config *ClientConfig) (*Client, error) {
 	c.Batch = newBatchService(baseClient)
 	c.WebSearch = newWebSearchService(baseClient)
 	c.Moderations = newModerationsService(baseClient)
+	c.Tools = newToolsService(baseClient)
 
 	return c, nil
 }
