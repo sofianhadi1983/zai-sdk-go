@@ -95,6 +95,15 @@ type ClientConfig struct {
 type ClientOption func(*ClientConfig)
 
 // WithAPIKey sets the API key for the client.
+//
+// The API key should be in the format "key.secret" as provided
+// by the Z.ai platform.
+//
+// Example:
+//
+//	client, err := zai.NewClient(
+//	    zai.WithAPIKey("abc123.xyz789"),
+//	)
 func WithAPIKey(apiKey string) ClientOption {
 	return func(c *ClientConfig) {
 		c.APIKey = apiKey
@@ -102,6 +111,16 @@ func WithAPIKey(apiKey string) ClientOption {
 }
 
 // WithBaseURL sets the base URL for API requests.
+//
+// Use this option when you need to use a custom API endpoint,
+// such as a proxy or a different regional endpoint.
+//
+// Example:
+//
+//	client, err := zai.NewClient(
+//	    zai.WithAPIKey("your-key"),
+//	    zai.WithBaseURL("https://api.custom.com/v1"),
+//	)
 func WithBaseURL(baseURL string) ClientOption {
 	return func(c *ClientConfig) {
 		c.BaseURL = baseURL
@@ -109,6 +128,16 @@ func WithBaseURL(baseURL string) ClientOption {
 }
 
 // WithTimeout sets the request timeout.
+//
+// This controls how long the client will wait for a response
+// before timing out. Default is 120 seconds.
+//
+// Example:
+//
+//	client, err := zai.NewClient(
+//	    zai.WithAPIKey("your-key"),
+//	    zai.WithTimeout(60 * time.Second),
+//	)
 func WithTimeout(timeout time.Duration) ClientOption {
 	return func(c *ClientConfig) {
 		c.Timeout = timeout
@@ -116,6 +145,16 @@ func WithTimeout(timeout time.Duration) ClientOption {
 }
 
 // WithMaxRetries sets the maximum number of retry attempts.
+//
+// The client will automatically retry failed requests up to
+// this number of times with exponential backoff. Default is 3.
+//
+// Example:
+//
+//	client, err := zai.NewClient(
+//	    zai.WithAPIKey("your-key"),
+//	    zai.WithMaxRetries(5),
+//	)
 func WithMaxRetries(maxRetries int) ClientOption {
 	return func(c *ClientConfig) {
 		c.MaxRetries = maxRetries
@@ -123,6 +162,17 @@ func WithMaxRetries(maxRetries int) ClientOption {
 }
 
 // WithDisableTokenCache disables JWT token caching.
+//
+// By default, the client caches JWT tokens to reduce overhead.
+// Use this option if you want to disable caching and generate
+// a new token for each request.
+//
+// Example:
+//
+//	client, err := zai.NewClient(
+//	    zai.WithAPIKey("your-key"),
+//	    zai.WithDisableTokenCache(),
+//	)
 func WithDisableTokenCache() ClientOption {
 	return func(c *ClientConfig) {
 		c.DisableTokenCache = true
@@ -130,6 +180,17 @@ func WithDisableTokenCache() ClientOption {
 }
 
 // WithLogger sets a custom logger.
+//
+// Use this option to provide your own logger for debugging
+// and monitoring API requests.
+//
+// Example:
+//
+//	customLogger := logger.New(logger.LevelDebug)
+//	client, err := zai.NewClient(
+//	    zai.WithAPIKey("your-key"),
+//	    zai.WithLogger(customLogger),
+//	)
 func WithLogger(logger *logger.Logger) ClientOption {
 	return func(c *ClientConfig) {
 		c.Logger = logger
@@ -138,6 +199,30 @@ func WithLogger(logger *logger.Logger) ClientOption {
 
 // NewClient creates a new Z.ai SDK client for overseas users.
 // The default base URL is https://open.bigmodel.cn/api/paas/v4/
+//
+// Basic usage:
+//
+//	client, err := zai.NewClient(
+//	    zai.WithAPIKey("your-api-key.your-secret"),
+//	)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//	defer client.Close()
+//
+// With additional options:
+//
+//	client, err := zai.NewClient(
+//	    zai.WithAPIKey("your-api-key.your-secret"),
+//	    zai.WithBaseURL("https://custom.api.url"),
+//	    zai.WithTimeout(120 * time.Second),
+//	    zai.WithMaxRetries(5),
+//	    zai.WithLogger(customLogger),
+//	)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//	defer client.Close()
 func NewClient(opts ...ClientOption) (*Client, error) {
 	config := &ClientConfig{
 		BaseURL: constants.ZaiBaseURL,
@@ -152,6 +237,26 @@ func NewClient(opts ...ClientOption) (*Client, error) {
 
 // NewZhipuClient creates a new Z.ai SDK client for Chinese users.
 // The default base URL is https://open.bigmodel.cn/api/paas/v4/
+//
+// This client is optimized for users in mainland China and uses
+// the domestic API endpoint.
+//
+// Example:
+//
+//	client, err := zai.NewZhipuClient(
+//	    zai.WithAPIKey("your-api-key.your-secret"),
+//	)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//	defer client.Close()
+//
+//	// Use the client for chat completions
+//	messages := []chat.Message{
+//	    {Role: chat.RoleUser, Content: "你好！"},
+//	}
+//	req := chat.NewChatCompletionRequest(chat.ModelGLM4Plus, messages)
+//	resp, err := client.Chat.Create(context.Background(), req)
 func NewZhipuClient(opts ...ClientOption) (*Client, error) {
 	config := &ClientConfig{
 		BaseURL: constants.ZhipuBaseURL,
@@ -166,6 +271,29 @@ func NewZhipuClient(opts ...ClientOption) (*Client, error) {
 
 // NewClientFromEnv creates a new client from environment variables.
 // Reads ZAI_API_KEY and optionally ZAI_BASE_URL from environment.
+//
+// Environment variables:
+//   - ZAI_API_KEY: Required. Your API key in format "key.secret"
+//   - ZAI_BASE_URL: Optional. Custom base URL for API requests
+//
+// Example:
+//
+//	// Set environment variables first:
+//	// export ZAI_API_KEY="your-api-key.your-secret"
+//	// export ZAI_BASE_URL="https://custom.api.url"  # optional
+//
+//	client, err := zai.NewClientFromEnv()
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//	defer client.Close()
+//
+// You can also override settings with options:
+//
+//	client, err := zai.NewClientFromEnv(
+//	    zai.WithTimeout(60 * time.Second),
+//	    zai.WithMaxRetries(3),
+//	)
 func NewClientFromEnv(opts ...ClientOption) (*Client, error) {
 	apiKey := os.Getenv("ZAI_API_KEY")
 	baseURL := os.Getenv("ZAI_BASE_URL")
@@ -190,6 +318,23 @@ func NewClientFromEnv(opts ...ClientOption) (*Client, error) {
 
 // NewZhipuClientFromEnv creates a new Chinese client from environment variables.
 // Reads ZAI_API_KEY from environment and uses Zhipu base URL.
+//
+// This is a convenience function for Chinese users that automatically
+// uses the domestic API endpoint (https://open.bigmodel.cn/api/paas/v4/).
+//
+// Environment variables:
+//   - ZAI_API_KEY: Required. Your API key in format "key.secret"
+//
+// Example:
+//
+//	// Set environment variable first:
+//	// export ZAI_API_KEY="your-api-key.your-secret"
+//
+//	client, err := zai.NewZhipuClientFromEnv()
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//	defer client.Close()
 func NewZhipuClientFromEnv(opts ...ClientOption) (*Client, error) {
 	apiKey := os.Getenv("ZAI_API_KEY")
 
@@ -256,16 +401,48 @@ func newClient(config *ClientConfig) (*Client, error) {
 }
 
 // GetConfig returns the client configuration.
+//
+// This method allows you to inspect the current client configuration
+// including API key, base URL, timeout, and other settings.
+//
+// Example:
+//
+//	config := client.GetConfig()
+//	fmt.Printf("Base URL: %s\n", config.BaseURL)
+//	fmt.Printf("Timeout: %v\n", config.Timeout)
+//	fmt.Printf("Max Retries: %d\n", config.MaxRetries)
 func (c *Client) GetConfig() *ClientConfig {
 	return c.config
 }
 
 // GetLogger returns the client logger.
+//
+// Use this method to access the logger for custom logging or debugging.
+//
+// Example:
+//
+//	logger := client.GetLogger()
+//	logger.Debug("Custom debug message")
+//	logger.Info("Custom info message")
 func (c *Client) GetLogger() *logger.Logger {
 	return c.baseClient.GetLogger()
 }
 
 // Close closes the client and releases resources.
+//
+// This method should be called when you're done using the client
+// to ensure proper cleanup of resources, especially HTTP connections.
+// It's recommended to use defer to ensure cleanup happens.
+//
+// Example:
+//
+//	client, err := zai.NewClient(zai.WithAPIKey("your-key"))
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//	defer client.Close()
+//
+//	// Use client...
 func (c *Client) Close() {
 	if c.baseClient != nil {
 		c.baseClient.Close()
