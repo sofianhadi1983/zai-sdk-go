@@ -54,6 +54,9 @@ type Client struct {
 
 	// Voice provides access to the Voice API.
 	Voice *VoiceService
+
+	// OCR provides access to the OCR API.
+	OCR *OCRService
 }
 
 // ClientConfig holds configuration for the SDK client.
@@ -239,6 +242,7 @@ func newClient(config *ClientConfig) (*Client, error) {
 	c.Tools = newToolsService(baseClient)
 	c.Agents = newAgentsService(baseClient)
 	c.Voice = newVoiceService(baseClient)
+	c.OCR = newOCRService(baseClient)
 
 	return c, nil
 }
