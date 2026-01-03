@@ -60,6 +60,9 @@ type Client struct {
 
 	// FileParser provides access to the File Parser API.
 	FileParser *FileParserService
+
+	// WebReader provides access to the Web Reader API.
+	WebReader *WebReaderService
 }
 
 // ClientConfig holds configuration for the SDK client.
@@ -247,6 +250,7 @@ func newClient(config *ClientConfig) (*Client, error) {
 	c.Voice = newVoiceService(baseClient)
 	c.OCR = newOCRService(baseClient)
 	c.FileParser = newFileParserService(baseClient)
+	c.WebReader = newWebReaderService(baseClient)
 
 	return c, nil
 }
