@@ -39,6 +39,9 @@ type Client struct {
 
 	// Batch provides access to the Batch API.
 	Batch *BatchService
+
+	// WebSearch provides access to the Web Search API.
+	WebSearch *WebSearchService
 }
 
 // ClientConfig holds configuration for the SDK client.
@@ -219,6 +222,7 @@ func newClient(config *ClientConfig) (*Client, error) {
 	c.Audio = newAudioService(baseClient)
 	c.Assistant = newAssistantService(baseClient)
 	c.Batch = newBatchService(baseClient)
+	c.WebSearch = newWebSearchService(baseClient)
 
 	return c, nil
 }
