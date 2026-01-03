@@ -28,6 +28,12 @@ type Message struct {
 	// Can be a string or an array of content parts for multimodal messages.
 	Content interface{} `json:"content,omitempty"`
 
+	// ReasoningContent contains the model's reasoning process when thinking mode is enabled.
+	// This field is populated when the model uses deep thinking or reasoning capabilities.
+	// When clear_thinking=false, you must return this field unmodified in subsequent requests
+	// to maintain reasoning continuity across conversation turns.
+	ReasoningContent string `json:"reasoning_content,omitempty"`
+
 	// Name is an optional name for the message author.
 	Name string `json:"name,omitempty"`
 

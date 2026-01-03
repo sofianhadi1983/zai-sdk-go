@@ -15,10 +15,13 @@ GLM's thinking feature enables the model to:
 ## Features Demonstrated
 
 ### 1. GLM-4.7 Native Thinking (Default)
-Demonstrates GLM-4.7's built-in thinking capability, which is enabled by default.
+Demonstrates GLM-4.7's built-in thinking capability with `reasoning_content` output.
 
 ### 2. GLM-4.7 with Thinking Disabled
-Shows how to disable thinking for faster, more direct responses.
+Shows how to disable thinking for faster, more direct responses using `DisableThinking()`.
+
+### 2.5. GLM-4.7 with Preserved Thinking (Multi-turn)
+Demonstrates `clear_thinking: false` to maintain reasoning continuity across conversation turns.
 
 ### 3. Basic Thinking (Complex Reasoning)
 Uses system prompts to encourage step-by-step reasoning for logic problems with GLM-4-Plus.
@@ -30,7 +33,7 @@ Shows how GLM can solve mathematical problems with detailed explanations.
 Demonstrates breaking down business scenarios into analytical steps.
 
 ### 6. Streaming Thinking Process
-Real-time streaming of the model's reasoning process.
+Real-time streaming of both `reasoning_content` and final answer with GLM-4.7.
 
 ## Running the Example
 
@@ -68,10 +71,57 @@ req.EnableThinking()
 // Disable thinking for faster, more direct responses
 req.DisableThinking()
 
-// Or set it directly
+// Or set it directly with advanced options
+clearThinking := false
 req.SetThinking(&chat.ThinkingConfig{
-    Type: chat.ThinkingTypeDisabled,
+    Type:          chat.ThinkingTypeEnabled,
+    ClearThinking: &clearThinking, // Preserve reasoning across turns
 })
+```
+
+#### Accessing Reasoning Content
+
+When thinking is enabled, the response includes the model's reasoning process:
+
+```go
+resp, err := client.Chat.Create(ctx, req)
+if err != nil {
+    log.Fatal(err)
+}
+
+// Get the reasoning process
+if reasoning := resp.GetReasoningContent(); reasoning != "" {
+    fmt.Println("Reasoning:", reasoning)
+}
+
+// Get the final answer
+fmt.Println("Answer:", resp.GetContent())
+```
+
+#### Preserved Thinking (Multi-turn Conversations)
+
+Set `clear_thinking: false` to maintain reasoning continuity across turns:
+
+```go
+req := &chat.ChatCompletionRequest{
+    Model:    "glm-4.7",
+    Messages: messages,
+}
+
+// Enable preserved thinking (sets clear_thinking: false)
+req.EnablePreservedThinking()
+
+// First turn
+resp1, _ := client.Chat.Create(ctx, req)
+
+// IMPORTANT: Include the complete assistant message with reasoning_content
+assistantMsg := resp1.GetFirstChoice().Message
+messages = append(messages, assistantMsg)
+messages = append(messages, chat.NewUserMessage("Follow-up question..."))
+
+// Second turn - reasoning continuity is maintained
+req.Messages = messages
+resp2, _ := client.Chat.Create(ctx, req)
 ```
 
 **When to disable thinking:**
@@ -84,6 +134,11 @@ req.SetThinking(&chat.ThinkingConfig{
 - Mathematical reasoning
 - Step-by-step analysis
 - Tasks requiring verification
+
+**When to preserve thinking (clear_thinking: false):**
+- Multi-turn problem-solving
+- Complex conversations requiring reasoning continuity
+- Debugging or step-by-step analysis across multiple messages
 
 ### 2. System Prompts for Reasoning (GLM-4-Plus)
 
@@ -124,6 +179,8 @@ chat.NewUserMessage(`Solve this problem step by step:
 
 ### 5. Streaming for Real-Time Thinking
 
+Stream both reasoning content and the final answer in real-time:
+
 ```go
 stream, err := client.Chat.CreateStream(ctx, req)
 if err != nil {
@@ -131,13 +188,34 @@ if err != nil {
 }
 defer stream.Close()
 
+var fullReasoning string
+var fullResponse string
+
 for stream.Next() {
     chunk := stream.Current()
-    if chunk != nil {
-        fmt.Print(chunk.GetContent()) // See thinking in real-time
+    if chunk == nil {
+        continue
+    }
+
+    // Stream reasoning content
+    if reasoning := chunk.GetReasoningContent(); reasoning != "" {
+        fmt.Print(reasoning)
+        fullReasoning += reasoning
+    }
+
+    // Stream final answer
+    if content := chunk.GetContent(); content != "" {
+        fmt.Print(content)
+        fullResponse += content
     }
 }
+
+if err := stream.Err(); err != nil {
+    log.Fatal(err)
+}
 ```
+
+This allows users to see the model's thinking process as it happens, improving transparency and user experience.
 
 ## Best Practices
 

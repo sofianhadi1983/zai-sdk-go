@@ -80,6 +80,12 @@ type ThinkingConfig struct {
 	// Type controls whether thinking is enabled or disabled.
 	// Possible values: "enabled" (default for GLM-4.7), "disabled"
 	Type string `json:"type,omitempty"`
+
+	// ClearThinking controls whether to preserve reasoning content from previous turns.
+	// false (default for standard endpoints): Preserve reasoning_content across turns for continuity
+	// true: Clear reasoning content, don't preserve across turns
+	// Note: When false, you must return complete, unmodified reasoning_content back to the API.
+	ClearThinking *bool `json:"clear_thinking,omitempty"`
 }
 
 // ThinkingType constants for thinking configuration.
@@ -168,5 +174,17 @@ func (r *ChatCompletionRequest) DisableThinking() *ChatCompletionRequest {
 // Note: GLM-4.7 has thinking enabled by default, so this is optional.
 func (r *ChatCompletionRequest) EnableThinking() *ChatCompletionRequest {
 	r.Thinking = &ThinkingConfig{Type: ThinkingTypeEnabled}
+	return r
+}
+
+// EnablePreservedThinking enables thinking with reasoning continuity across turns.
+// This sets clear_thinking to false, which preserves reasoning_content from previous turns.
+// You must return complete, unmodified reasoning_content in subsequent requests.
+func (r *ChatCompletionRequest) EnablePreservedThinking() *ChatCompletionRequest {
+	clearThinking := false
+	r.Thinking = &ThinkingConfig{
+		Type:          ThinkingTypeEnabled,
+		ClearThinking: &clearThinking,
+	}
 	return r
 }

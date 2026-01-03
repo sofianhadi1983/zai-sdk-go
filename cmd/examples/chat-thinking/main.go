@@ -34,6 +34,12 @@ func main() {
 
 	fmt.Println("\n" + strings.Repeat("=", 60) + "\n")
 
+	// Example 2.5: GLM-4.7 with preserved thinking (multi-turn)
+	fmt.Println("Example 2.5: GLM-4.7 with Preserved Thinking (Multi-turn)")
+	glm47PreservedThinkingExample(ctx, client)
+
+	fmt.Println("\n" + strings.Repeat("=", 60) + "\n")
+
 	// Example 3: Basic thinking with GLM-4-Plus
 	fmt.Println("Example 3: Complex reasoning task")
 	basicThinkingExample(ctx, client)
@@ -86,7 +92,15 @@ Please show your thinking process.`),
 		return
 	}
 
-	fmt.Println("Response (with native thinking enabled):")
+	// Display reasoning content if available
+	if reasoning := resp.GetReasoningContent(); reasoning != "" {
+		fmt.Println("Reasoning Process:")
+		fmt.Println(strings.Repeat("-", 60))
+		fmt.Println(reasoning)
+		fmt.Println(strings.Repeat("-", 60))
+	}
+
+	fmt.Println("\nFinal Answer:")
 	fmt.Println(resp.GetContent())
 	fmt.Printf("\nTokens used: %d\n", resp.Usage.TotalTokens)
 }
@@ -121,6 +135,66 @@ How many chickens and how many rabbits does the farmer have?`),
 	fmt.Println("Response (with thinking disabled):")
 	fmt.Println(resp.GetContent())
 	fmt.Printf("\nTokens used: %d\n", resp.Usage.TotalTokens)
+}
+
+func glm47PreservedThinkingExample(ctx context.Context, client *zai.Client) {
+	// Demonstrate preserved thinking across multiple turns
+	// This maintains reasoning continuity by preserving reasoning_content
+
+	// Turn 1: Initial reasoning task
+	messages := []chat.Message{
+		chat.NewUserMessage(`Let's work on a complex problem together.
+
+First, help me understand: If a store sells apples for $2 each and oranges for $3 each,
+and someone spent $23 buying 9 fruits total, how many of each did they buy?`),
+	}
+
+	temp := 0.7
+	maxTokens := 2000
+	req := &chat.ChatCompletionRequest{
+		Model:       "glm-4.7",
+		Messages:    messages,
+		Temperature: &temp,
+		MaxTokens:   &maxTokens,
+	}
+	// Enable preserved thinking for multi-turn reasoning continuity
+	req.EnablePreservedThinking()
+
+	fmt.Println("Turn 1: Initial Problem")
+	resp1, err := client.Chat.Create(ctx, req)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return
+	}
+
+	fmt.Println("Assistant's Response:")
+	fmt.Println(resp1.GetContent())
+	if reasoning := resp1.GetReasoningContent(); reasoning != "" {
+		fmt.Printf("\n[Reasoning preserved: %d chars]\n", len(reasoning))
+	}
+
+	// Turn 2: Follow-up question - preserve the reasoning_content from Turn 1
+	assistantMsg := resp1.GetFirstChoice().Message
+	messages = append(messages, assistantMsg) // Include full message with reasoning_content
+	messages = append(messages, chat.NewUserMessage("Now, can you verify this answer by checking the totals?"))
+
+	req.Messages = messages
+
+	fmt.Println("\n" + strings.Repeat("-", 60))
+	fmt.Println("Turn 2: Follow-up Verification")
+	resp2, err := client.Chat.Create(ctx, req)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return
+	}
+
+	fmt.Println("Assistant's Response:")
+	fmt.Println(resp2.GetContent())
+	if reasoning := resp2.GetReasoningContent(); reasoning != "" {
+		fmt.Printf("\n[Reasoning preserved: %d chars]\n", len(reasoning))
+	}
+
+	fmt.Println("\nNote: The model maintained reasoning continuity across both turns.")
 }
 
 func basicThinkingExample(ctx context.Context, client *zai.Client) {
@@ -225,26 +299,26 @@ what was their final revenue? What was the overall percentage change?`),
 }
 
 func streamingThinkingExample(ctx context.Context, client *zai.Client) {
+	// Stream both reasoning content and final answer from GLM-4.7
 	messages := []chat.Message{
-		chat.NewSystemMessage("Think through problems carefully, showing your reasoning process."),
 		chat.NewUserMessage(`Design a simple algorithm to determine if a string is a palindrome.
 
 Explain your thinking:
 1. What approach will you use?
 2. What are the edge cases?
-3. What's the time complexity?
-4. Show example code`),
+3. What's the time complexity?`),
 	}
 
 	streamFlag := true
 	temp := 0.7
 	maxTokens := 2000
 	req := &chat.ChatCompletionRequest{
-		Model:       "glm-4-plus",
+		Model:       "glm-4.7",
 		Messages:    messages,
 		Stream:      &streamFlag,
 		Temperature: &temp,
 		MaxTokens:   &maxTokens,
+		// Thinking enabled by default for GLM-4.7
 	}
 
 	stream, err := client.Chat.CreateStream(ctx, req)
@@ -254,14 +328,35 @@ Explain your thinking:
 	}
 	defer stream.Close()
 
-	fmt.Println("Streaming thinking process:")
-	fmt.Println(strings.Repeat("-", 60))
-
+	var fullReasoning string
 	var fullResponse string
+	var showingReasoning bool
+
 	for stream.Next() {
 		chunk := stream.Current()
-		if chunk != nil {
-			content := chunk.GetContent()
+		if chunk == nil {
+			continue
+		}
+
+		// Check for reasoning content
+		if reasoning := chunk.GetReasoningContent(); reasoning != "" {
+			if !showingReasoning {
+				fmt.Println("Reasoning Process (streaming):")
+				fmt.Println(strings.Repeat("-", 60))
+				showingReasoning = true
+			}
+			fmt.Print(reasoning)
+			fullReasoning += reasoning
+		}
+
+		// Check for regular content
+		if content := chunk.GetContent(); content != "" {
+			if showingReasoning {
+				fmt.Println("\n" + strings.Repeat("-", 60))
+				fmt.Println("\nFinal Answer (streaming):")
+				fmt.Println(strings.Repeat("-", 60))
+				showingReasoning = false
+			}
 			fmt.Print(content)
 			fullResponse += content
 		}
@@ -273,7 +368,7 @@ Explain your thinking:
 	}
 
 	fmt.Println("\n" + strings.Repeat("-", 60))
-	fmt.Printf("\nTotal characters streamed: %d\n", len(fullResponse))
+	fmt.Printf("\nReasoning: %d chars, Answer: %d chars\n", len(fullReasoning), len(fullResponse))
 }
 
 // Example with function calling for complex reasoning

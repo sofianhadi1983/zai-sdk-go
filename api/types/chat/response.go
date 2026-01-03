@@ -102,6 +102,17 @@ func (r *ChatCompletionResponse) GetContent() string {
 	return ""
 }
 
+// GetReasoningContent returns the reasoning content of the first choice's message.
+// Returns empty string if there are no choices or no reasoning content.
+// This is populated when thinking mode is enabled.
+func (r *ChatCompletionResponse) GetReasoningContent() string {
+	choice := r.GetFirstChoice()
+	if choice == nil {
+		return ""
+	}
+	return choice.Message.ReasoningContent
+}
+
 // ChatCompletionChunk represents a chunk in a streaming chat completion.
 type ChatCompletionChunk struct {
 	// ID is the unique identifier for the completion.
@@ -150,6 +161,10 @@ type Delta struct {
 	// Content is the incremental content.
 	Content string `json:"content,omitempty"`
 
+	// ReasoningContent is the incremental reasoning content when thinking mode is enabled.
+	// This field contains the model's step-by-step reasoning process as it streams.
+	ReasoningContent string `json:"reasoning_content,omitempty"`
+
 	// ToolCalls are incremental tool calls.
 	ToolCalls []ToolCall `json:"tool_calls,omitempty"`
 
@@ -164,6 +179,16 @@ func (c *ChatCompletionChunk) GetContent() string {
 		return ""
 	}
 	return c.Choices[0].Delta.Content
+}
+
+// GetReasoningContent returns the reasoning content from the first choice's delta.
+// Returns empty string if there are no choices or no reasoning content.
+// This is populated when thinking mode is enabled.
+func (c *ChatCompletionChunk) GetReasoningContent() string {
+	if len(c.Choices) == 0 {
+		return ""
+	}
+	return c.Choices[0].Delta.ReasoningContent
 }
 
 // IsFinished returns true if this chunk indicates the completion is finished.
