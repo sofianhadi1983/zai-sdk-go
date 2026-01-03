@@ -37,7 +37,7 @@ Official Go SDK for the Z.ai API (智谱AI). This library provides a comprehensi
 - **Batch** - Batch processing with pagination and cancellation
 - **Web Search** - AI-powered web search with intent analysis
 - **Moderations** - Content moderation and safety checks
-- **Tools** - Function calling and tool execution
+- **Tools** - Function calling, tool execution, and token counting (Tokenizer)
 
 **Specialized APIs:**
 - **Agents** - Agent invocation with streaming and async results

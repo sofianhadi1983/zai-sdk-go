@@ -57,13 +57,13 @@ func TestImageGenerationRequest_Setters(t *testing.T) {
 		assert.Equal(t, ResponseFormatB64JSON, req.ResponseFormat)
 	})
 
-	t.Run("SetUser", func(t *testing.T) {
+	t.Run("SetUserID", func(t *testing.T) {
 		t.Parallel()
 
 		req := &ImageGenerationRequest{}
-		req.SetUser("user-789")
+		req.SetUserID("user-789")
 
-		assert.Equal(t, "user-789", req.User)
+		assert.Equal(t, "user-789", req.UserID)
 	})
 
 	t.Run("chained setters", func(t *testing.T) {
@@ -74,14 +74,14 @@ func TestImageGenerationRequest_Setters(t *testing.T) {
 			SetQuality(QualityHD).
 			SetN(3).
 			SetResponseFormat(ResponseFormatURL).
-			SetUser("user-456")
+			SetUserID("user-456")
 
 		assert.Equal(t, Size1024x1792, req.Size)
 		assert.Equal(t, QualityHD, req.Quality)
 		require.NotNil(t, req.N)
 		assert.Equal(t, 3, *req.N)
 		assert.Equal(t, ResponseFormatURL, req.ResponseFormat)
-		assert.Equal(t, "user-456", req.User)
+		assert.Equal(t, "user-456", req.UserID)
 	})
 }
 
@@ -115,7 +115,7 @@ func TestImageGenerationRequest_JSON(t *testing.T) {
 			Quality:        QualityHD,
 			N:              &n,
 			ResponseFormat: ResponseFormatURL,
-			User:           "user-123",
+			UserID:         "user-123",
 		}
 
 		data, err := json.Marshal(req)
@@ -448,7 +448,7 @@ func TestImageGenerationRequest_CompleteExample(t *testing.T) {
 		SetQuality(QualityHD).
 		SetN(4).
 		SetResponseFormat(ResponseFormatURL).
-		SetUser("user-abc-123")
+		SetUserID("user-abc-123")
 
 	// Verify the request is complete
 	assert.Equal(t, "cogview-3", req.Model)
@@ -458,7 +458,7 @@ func TestImageGenerationRequest_CompleteExample(t *testing.T) {
 	require.NotNil(t, req.N)
 	assert.Equal(t, 4, *req.N)
 	assert.Equal(t, ResponseFormatURL, req.ResponseFormat)
-	assert.Equal(t, "user-abc-123", req.User)
+	assert.Equal(t, "user-abc-123", req.UserID)
 
 	// Ensure it can be marshaled
 	data, err := json.Marshal(req)

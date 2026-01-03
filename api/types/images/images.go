@@ -7,8 +7,24 @@ import "github.com/sofianhadi1983/zai-sdk-go/internal/models"
 type ImageSize string
 
 const (
-	// Size1024x1024 generates a 1024x1024 square image.
+	// Size1024x1024 generates a 1024x1024 square image (default).
 	Size1024x1024 ImageSize = "1024x1024"
+
+	// Recommended sizes from Z.ai API spec:
+	// Size768x1344 generates a 768x1344 portrait image.
+	Size768x1344 ImageSize = "768x1344"
+	// Size864x1152 generates a 864x1152 portrait image.
+	Size864x1152 ImageSize = "864x1152"
+	// Size1344x768 generates a 1344x768 landscape image.
+	Size1344x768 ImageSize = "1344x768"
+	// Size1152x864 generates a 1152x864 landscape image.
+	Size1152x864 ImageSize = "1152x864"
+	// Size1440x720 generates a 1440x720 wide landscape image.
+	Size1440x720 ImageSize = "1440x720"
+	// Size720x1440 generates a 720x1440 tall portrait image.
+	Size720x1440 ImageSize = "720x1440"
+
+	// Legacy sizes (kept for compatibility):
 	// Size1792x1024 generates a 1792x1024 landscape image.
 	Size1792x1024 ImageSize = "1792x1024"
 	// Size1024x1792 generates a 1024x1792 portrait image.
@@ -59,8 +75,9 @@ type ImageGenerationRequest struct {
 	// Defaults to "url" if not specified.
 	ResponseFormat ResponseFormat `json:"response_format,omitempty"`
 
-	// User is a unique identifier representing your end-user.
-	User string `json:"user,omitempty"`
+	// UserID is a unique identifier for the end-user (6-128 characters).
+	// Used for abuse detection and monitoring.
+	UserID string `json:"user_id,omitempty"`
 }
 
 // NewImageGenerationRequest creates a new image generation request with required fields.
@@ -115,13 +132,14 @@ func (r *ImageGenerationRequest) SetResponseFormat(format ResponseFormat) *Image
 	return r
 }
 
-// SetUser sets the user identifier.
+// SetUserID sets the end-user identifier.
+// The user ID should be 6-128 characters and is used for abuse detection.
 //
 // Example:
 //
-//	req.SetUser("user-123")
-func (r *ImageGenerationRequest) SetUser(user string) *ImageGenerationRequest {
-	r.User = user
+//	req.SetUserID("user-123456")
+func (r *ImageGenerationRequest) SetUserID(userID string) *ImageGenerationRequest {
+	r.UserID = userID
 	return r
 }
 
@@ -147,6 +165,15 @@ func (i *ImageData) GetBase64Data() string {
 	return i.B64JSON
 }
 
+// ContentFilterItem represents content safety filtering information.
+type ContentFilterItem struct {
+	// Role indicates the message role ("assistant", "user", or "history").
+	Role string `json:"role"`
+
+	// Level indicates the severity level (0-3, where 0 is most severe).
+	Level int `json:"level"`
+}
+
 // ImageGenerationResponse represents a response from the image generation API.
 type ImageGenerationResponse struct {
 	// Created is the Unix timestamp when the images were created.
@@ -154,6 +181,10 @@ type ImageGenerationResponse struct {
 
 	// Data is the list of generated images.
 	Data []ImageData `json:"data"`
+
+	// ContentFilter contains safety information about the generated content.
+	// Each item indicates the safety level for different parts of the interaction.
+	ContentFilter []ContentFilterItem `json:"content_filter,omitempty"`
 
 	// Usage contains token usage information (if available).
 	Usage *models.Usage `json:"usage,omitempty"`

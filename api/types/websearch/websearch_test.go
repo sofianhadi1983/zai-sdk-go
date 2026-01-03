@@ -17,7 +17,7 @@ func TestWebSearchRequest(t *testing.T) {
 		req := NewWebSearchRequest("artificial intelligence")
 
 		assert.Equal(t, "artificial intelligence", req.SearchQuery)
-		assert.Empty(t, req.SearchEngine)
+		assert.Equal(t, SearchEnginePrime, req.SearchEngine)
 		assert.Equal(t, 0, req.Count)
 		assert.False(t, req.SearchIntent)
 		assert.False(t, req.IncludeImage)
@@ -29,7 +29,7 @@ func TestWebSearchRequest(t *testing.T) {
 		req := NewWebSearchRequest("machine learning").
 			SetSearchEngine("google").
 			SetCount(10).
-			SetRecencyFilter(RecencyFilterWeek).
+			SetRecencyFilter(RecencyFilterOneWeek).
 			SetContentSize(ContentSizeLarge).
 			SetSearchIntent(true).
 			SetIncludeImage(true).
@@ -40,7 +40,7 @@ func TestWebSearchRequest(t *testing.T) {
 		assert.Equal(t, "machine learning", req.SearchQuery)
 		assert.Equal(t, "google", req.SearchEngine)
 		assert.Equal(t, 10, req.Count)
-		assert.Equal(t, RecencyFilterWeek, req.SearchRecencyFilter)
+		assert.Equal(t, RecencyFilterOneWeek, req.SearchRecencyFilter)
 		assert.Equal(t, ContentSizeLarge, req.ContentSize)
 		assert.True(t, req.SearchIntent)
 		assert.True(t, req.IncludeImage)
@@ -309,10 +309,11 @@ func TestSearchResultResp(t *testing.T) {
 func TestRecencyFilterConstants(t *testing.T) {
 	t.Parallel()
 
-	assert.Equal(t, "day", RecencyFilterDay)
-	assert.Equal(t, "week", RecencyFilterWeek)
-	assert.Equal(t, "month", RecencyFilterMonth)
-	assert.Equal(t, "year", RecencyFilterYear)
+	assert.Equal(t, "oneDay", RecencyFilterOneDay)
+	assert.Equal(t, "oneWeek", RecencyFilterOneWeek)
+	assert.Equal(t, "oneMonth", RecencyFilterOneMonth)
+	assert.Equal(t, "oneYear", RecencyFilterOneYear)
+	assert.Equal(t, "noLimit", RecencyFilterNoLimit)
 }
 
 func TestContentSizeConstants(t *testing.T) {

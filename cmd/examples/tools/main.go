@@ -41,6 +41,10 @@ func main() {
 	// Example 5: Analyzing search results
 	fmt.Println("\n=== Example 5: Analyzing Search Results ===")
 	analyzeSearchResultsExample(ctx, client)
+
+	// Example 6: Token counting
+	fmt.Println("\n=== Example 6: Token Counting (Tokenizer) ===")
+	tokenizerExample(ctx, client)
 }
 
 func basicWebSearchExample(ctx context.Context, client *zai.Client) {
@@ -307,6 +311,100 @@ func analyzeSearchResultsExample(ctx context.Context, client *zai.Client) {
 	fmt.Printf("Total Results: %d\n", len(results))
 	fmt.Printf("Unique Sources: %d\n", len(sourceMap))
 	fmt.Printf("Recommendations: %d\n", len(recommends))
+}
+
+func tokenizerExample(ctx context.Context, client *zai.Client) {
+	// Example: Count tokens before making an actual API call
+	// This helps estimate costs and stay within token limits
+
+	// Example 1: Simple message tokenization
+	messages := []chat.Message{
+		chat.NewSystemMessage("You are a helpful AI assistant specialized in explaining complex topics."),
+		chat.NewUserMessage("Can you explain quantum computing in simple terms?"),
+	}
+
+	req := tools.NewTokenizerRequest("glm-4.6", messages)
+
+	resp, err := client.Tools.Tokenizer(ctx, req)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return
+	}
+
+	fmt.Println("Simple Message Tokenization:")
+	fmt.Printf("  Prompt tokens: %d\n", resp.Usage.PromptTokens)
+	fmt.Printf("  Total tokens: %d\n", resp.Usage.TotalTokens)
+	fmt.Printf("  Request ID: %s\n", resp.RequestID)
+
+	// Example 2: Tokenization with function tools
+	fmt.Println("\nTokenization with Function Tools:")
+
+	toolDef := chat.NewFunctionTool(
+		"get_weather",
+		"Get the current weather in a given location",
+		map[string]interface{}{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"location": map[string]interface{}{
+					"type":        "string",
+					"description": "City name, e.g., San Francisco",
+				},
+				"unit": map[string]interface{}{
+					"type": "string",
+					"enum": []string{"celsius", "fahrenheit"},
+				},
+			},
+			"required": []string{"location"},
+		},
+	)
+
+	messagesWithTools := []chat.Message{
+		chat.NewSystemMessage("You are a weather assistant."),
+		chat.NewUserMessage("What's the weather like in Tokyo?"),
+	}
+
+	reqWithTools := tools.NewTokenizerRequest("glm-4.6", messagesWithTools).
+		SetTools([]chat.Tool{toolDef})
+
+	respWithTools, err := client.Tools.Tokenizer(ctx, reqWithTools)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return
+	}
+
+	fmt.Printf("  Prompt tokens (with tool definitions): %d\n", respWithTools.Usage.PromptTokens)
+	fmt.Printf("  Total tokens: %d\n", respWithTools.Usage.TotalTokens)
+	fmt.Printf("  Extra tokens from tool definition: %d\n",
+		respWithTools.Usage.PromptTokens-resp.Usage.PromptTokens)
+
+	// Example 3: Multi-turn conversation tokenization
+	fmt.Println("\nMulti-turn Conversation Tokenization:")
+
+	conversation := []chat.Message{
+		chat.NewSystemMessage("You are a coding tutor."),
+		chat.NewUserMessage("How do I write a for loop in Python?"),
+		chat.NewAssistantMessage("In Python, you can write a for loop like this:\n\nfor i in range(10):\n    print(i)"),
+		chat.NewUserMessage("Can you explain what range() does?"),
+	}
+
+	convReq := tools.NewTokenizerRequest("glm-4.6", conversation)
+
+	convResp, err := client.Tools.Tokenizer(ctx, convReq)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return
+	}
+
+	fmt.Printf("  Messages in conversation: %d\n", len(conversation))
+	fmt.Printf("  Total prompt tokens: %d\n", convResp.Usage.PromptTokens)
+	fmt.Printf("  Average tokens per message: %.1f\n",
+		float64(convResp.Usage.PromptTokens)/float64(len(conversation)))
+
+	// Cost estimation (example pricing)
+	fmt.Println("\n--- Cost Estimation Example ---")
+	pricePerMToken := 0.01 // Example: $0.01 per 1M tokens
+	estimatedCost := float64(convResp.Usage.TotalTokens) * pricePerMToken / 1_000_000
+	fmt.Printf("  Estimated cost for this request: $%.6f\n", estimatedCost)
 }
 
 // Helper function to truncate long strings

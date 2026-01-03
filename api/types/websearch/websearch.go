@@ -125,12 +125,13 @@ type WebSearchRequest struct {
 	IncludeImage bool `json:"include_image,omitempty"`
 }
 
-// Recency filter constants
+// Recency filter constants (per Z.ai API specification)
 const (
-	RecencyFilterDay   = "day"
-	RecencyFilterWeek  = "week"
-	RecencyFilterMonth = "month"
-	RecencyFilterYear  = "year"
+	RecencyFilterOneDay   = "oneDay"
+	RecencyFilterOneWeek  = "oneWeek"
+	RecencyFilterOneMonth = "oneMonth"
+	RecencyFilterOneYear  = "oneYear"
+	RecencyFilterNoLimit  = "noLimit"
 )
 
 // Content size constants
@@ -140,14 +141,22 @@ const (
 	ContentSizeLarge  = "large"
 )
 
+// Search engine constants
+const (
+	// SearchEnginePrime is the Z.ai Premium Version Search Engine (required value).
+	SearchEnginePrime = "search-prime"
+)
+
 // NewWebSearchRequest creates a new web search request.
+// The search engine is automatically set to "search-prime" (the only supported value).
 //
 // Example:
 //
 //	req := websearch.NewWebSearchRequest("artificial intelligence trends 2024")
 func NewWebSearchRequest(query string) *WebSearchRequest {
 	return &WebSearchRequest{
-		SearchQuery: query,
+		SearchQuery:  query,
+		SearchEngine: SearchEnginePrime, // Default to required value
 	}
 }
 

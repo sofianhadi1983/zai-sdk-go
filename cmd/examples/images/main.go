@@ -109,7 +109,7 @@ func customParametersExample(ctx context.Context, client *zai.Client) {
 	req.SetSize(images.Size1024x1792). // Portrait orientation
 						SetQuality(images.QualityHD).        // High quality
 						SetN(2).                              // Generate 2 variations
-						SetUser("example-user-123")          // Optional user ID
+						SetUserID("example-user-123")        // Optional user ID
 
 	resp, err := client.Images.Create(ctx, req)
 	if err != nil {

@@ -29,7 +29,7 @@ func TestWebSearchService_Search(t *testing.T) {
 		assert.Equal(t, 10, reqBody.Count)
 		assert.True(t, reqBody.SearchIntent)
 		assert.True(t, reqBody.IncludeImage)
-		assert.Equal(t, websearch.RecencyFilterWeek, reqBody.SearchRecencyFilter)
+		assert.Equal(t, websearch.RecencyFilterOneWeek, reqBody.SearchRecencyFilter)
 		assert.Equal(t, websearch.ContentSizeLarge, reqBody.ContentSize)
 
 		// Send mock response
@@ -82,7 +82,7 @@ func TestWebSearchService_Search(t *testing.T) {
 		SetCount(10).
 		SetSearchIntent(true).
 		SetIncludeImage(true).
-		SetRecencyFilter(websearch.RecencyFilterWeek).
+		SetRecencyFilter(websearch.RecencyFilterOneWeek).
 		SetContentSize(websearch.ContentSizeLarge)
 
 	resp, err := client.WebSearch.Search(context.Background(), req)
@@ -133,7 +133,7 @@ func TestWebSearchService_Search_WithFilters(t *testing.T) {
 
 		// Verify filters
 		assert.Equal(t, "arxiv.org", reqBody.SearchDomainFilter)
-		assert.Equal(t, websearch.RecencyFilterMonth, reqBody.SearchRecencyFilter)
+		assert.Equal(t, websearch.RecencyFilterOneMonth, reqBody.SearchRecencyFilter)
 		assert.Equal(t, websearch.ContentSizeMedium, reqBody.ContentSize)
 
 		// Send mock response
@@ -166,7 +166,7 @@ func TestWebSearchService_Search_WithFilters(t *testing.T) {
 
 	req := websearch.NewWebSearchRequest("machine learning research").
 		SetDomainFilter("arxiv.org").
-		SetRecencyFilter(websearch.RecencyFilterMonth).
+		SetRecencyFilter(websearch.RecencyFilterOneMonth).
 		SetContentSize(websearch.ContentSizeMedium)
 
 	resp, err := client.WebSearch.Search(context.Background(), req)

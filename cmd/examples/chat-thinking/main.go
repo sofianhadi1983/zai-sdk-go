@@ -20,7 +20,7 @@ func main() {
 
 	ctx := context.Background()
 
-	fmt.Println("=== GLM Thinking/Deep Thinking Examples ===\n")
+	fmt.Println("=== GLM Thinking/Deep Thinking Examples ===")
 
 	// Example 1: GLM-4.7 with native thinking (enabled by default)
 	fmt.Println("Example 1: GLM-4.7 Native Thinking (Default)")

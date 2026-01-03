@@ -102,7 +102,7 @@ func searchWithFiltersExample(ctx context.Context, client *zai.Client) {
 	// Search with various filters
 	req := websearch.NewWebSearchRequest("quantum computing research").
 		SetCount(10).
-		SetRecencyFilter(websearch.RecencyFilterMonth).
+		SetRecencyFilter(websearch.RecencyFilterOneMonth).
 		SetContentSize(websearch.ContentSizeLarge)
 
 	resp, err := client.WebSearch.Search(ctx, req)
@@ -112,7 +112,7 @@ func searchWithFiltersExample(ctx context.Context, client *zai.Client) {
 	}
 
 	fmt.Printf("Filtered Search Results (Recent: %s, Size: %s):\n\n",
-		websearch.RecencyFilterMonth, websearch.ContentSizeLarge)
+		websearch.RecencyFilterOneMonth, websearch.ContentSizeLarge)
 
 	for i, result := range resp.GetResults() {
 		fmt.Printf("%d. %s\n", i+1, result.Title)
@@ -157,7 +157,7 @@ func domainSpecificSearchExample(ctx context.Context, client *zai.Client) {
 	req := websearch.NewWebSearchRequest("machine learning papers").
 		SetDomainFilter("arxiv.org").
 		SetCount(5).
-		SetRecencyFilter(websearch.RecencyFilterWeek)
+		SetRecencyFilter(websearch.RecencyFilterOneWeek)
 
 	resp, err := client.WebSearch.Search(ctx, req)
 	if err != nil {
@@ -182,9 +182,9 @@ func recentContentSearchExample(ctx context.Context, client *zai.Client) {
 		query  string
 		filter string
 	}{
-		{"AI news", websearch.RecencyFilterDay},
-		{"tech updates", websearch.RecencyFilterWeek},
-		{"industry trends", websearch.RecencyFilterMonth},
+		{"AI news", websearch.RecencyFilterOneDay},
+		{"tech updates", websearch.RecencyFilterOneWeek},
+		{"industry trends", websearch.RecencyFilterOneMonth},
 	}
 
 	for _, q := range queries {
@@ -241,7 +241,7 @@ func comprehensiveSearchExample(ctx context.Context, client *zai.Client) {
 		SetCount(15).
 		SetSearchIntent(true).
 		SetIncludeImage(true).
-		SetRecencyFilter(websearch.RecencyFilterMonth).
+		SetRecencyFilter(websearch.RecencyFilterOneMonth).
 		SetContentSize(websearch.ContentSizeLarge).
 		SetRequestID("req_comprehensive_123").
 		SetUserID("user_456")

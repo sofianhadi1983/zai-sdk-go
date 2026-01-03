@@ -121,3 +121,40 @@ func (s *ToolsService) WebSearchStream(ctx context.Context, req *tools.WebSearch
 	// Create typed stream
 	return client.NewTypedStream[tools.WebSearchChunk](streamResp, ctx), nil
 }
+
+// Tokenizer counts tokens in messages and tools for cost estimation.
+//
+// This endpoint helps you calculate token usage before making actual API calls,
+// which is useful for cost estimation and staying within token limits.
+//
+// Example:
+//
+//	messages := []chat.Message{
+//	    chat.NewSystemMessage("You are a helpful assistant."),
+//	    chat.NewUserMessage("Hello, how are you?"),
+//	}
+//
+//	req := tools.NewTokenizerRequest("glm-4.6", messages)
+//
+//	resp, err := client.Tools.Tokenizer(ctx, req)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//
+//	fmt.Printf("Prompt tokens: %d\n", resp.Usage.PromptTokens)
+//	fmt.Printf("Total tokens: %d\n", resp.Usage.TotalTokens)
+func (s *ToolsService) Tokenizer(ctx context.Context, req *tools.TokenizerRequest) (*tools.TokenizerResponse, error) {
+	// Make the API request
+	apiResp, err := s.client.Post(ctx, "/tokenizer", req)
+	if err != nil {
+		return nil, err
+	}
+
+	// Parse the response
+	var resp tools.TokenizerResponse
+	if err := s.client.ParseJSON(apiResp, &resp); err != nil {
+		return nil, err
+	}
+
+	return &resp, nil
+}

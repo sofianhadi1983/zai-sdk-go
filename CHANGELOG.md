@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-01-03
+
+### Added
+- **Tokenizer API**: New `Tools.Tokenizer()` method for counting tokens in messages and tools before making API calls
+  - Helps with cost estimation and staying within token limits
+  - Supports multimodal content (text, images, video)
+  - Returns detailed token counts including prompt, image, video, and total tokens
+- **Chat Completions**: Added `ToolStream` parameter for streaming function call responses
+- **Chat Completions**: Added `SetUserID()`, `SetRequestID()`, and `SetToolStream()` helper methods
+- **Image Generation**: Added `ContentFilter` field in response for safety information
+- **Image Generation**: Added recommended size constants per Z.ai spec:
+  - `Size768x1344`, `Size864x1152`, `Size1344x768`, `Size1152x864`, `Size1440x720`, `Size720x1440`
+- **Web Search**: Added `SearchEnginePrime` constant and default value
+- **Web Search**: Added `RecencyFilterNoLimit` constant
+- **Examples**: Added comprehensive tokenizer example showing token counting, cost estimation, and multi-turn conversations
+
+### Changed
+- **BREAKING**: Renamed `User` field to `UserID` in `ChatCompletionRequest` to match Z.ai API specification
+  - Migration: Change `req.SetUser("id")` to `req.SetUserID("id")`
+- **BREAKING**: Renamed `User` field to `UserID` in `ImageGenerationRequest` to match Z.ai API specification
+  - Migration: Change `req.SetUser("id")` to `req.SetUserID("id")`
+- **BREAKING**: Updated Web Search recency filter constants to match Z.ai API specification:
+  - `RecencyFilterDay` → `RecencyFilterOneDay`
+  - `RecencyFilterWeek` → `RecencyFilterOneWeek`
+  - `RecencyFilterMonth` → `RecencyFilterOneMonth`
+  - `RecencyFilterYear` → `RecencyFilterOneYear`
+- **Web Search**: `NewWebSearchRequest()` now defaults `search_engine` to `"search-prime"` (required by API)
+- **Documentation**: Updated all examples to use new field names and constants
+- **Documentation**: Enhanced GoDoc comments with Z.ai spec compliance notes
+
+### Fixed
+- Chat Completions now correctly uses `user_id` field name instead of `user` per Z.ai API spec
+- Image Generation now correctly uses `user_id` field name instead of `user` per Z.ai API spec
+- Web Search recency filter values now match Z.ai API spec exactly
+
 ## [0.1.0] - 2026-01-03
 
 ### Added

@@ -272,3 +272,87 @@ type WebSearchChunk struct {
 	// Choices contains the list of choices in this chunk.
 	Choices []WebSearchStreamChoice `json:"choices"`
 }
+
+// TokenizerRequest represents a request to count tokens.
+type TokenizerRequest struct {
+	// Model is the model to use for tokenization (required).
+	// Options: "glm-4.6", "glm-4.6v", "glm-4.5"
+	Model string `json:"model"`
+
+	// Messages contains the conversation messages to tokenize (required).
+	// Minimum one message required. Supports user, system, and assistant messages.
+	Messages []chat.Message `json:"messages"`
+
+	// Tools is an optional list of function definitions (max 128).
+	Tools []chat.Tool `json:"tools,omitempty"`
+
+	// RequestID is a unique identifier for the request.
+	// If not provided, the platform will generate one automatically.
+	RequestID string `json:"request_id,omitempty"`
+
+	// UserID is a unique identifier for the end-user.
+	UserID string `json:"user_id,omitempty"`
+}
+
+// NewTokenizerRequest creates a new tokenizer request.
+//
+// Example:
+//
+//	messages := []chat.Message{
+//	    chat.NewUserMessage("Hello, world!"),
+//	}
+//	req := tools.NewTokenizerRequest("glm-4.6", messages)
+func NewTokenizerRequest(model string, messages []chat.Message) *TokenizerRequest {
+	return &TokenizerRequest{
+		Model:    model,
+		Messages: messages,
+	}
+}
+
+// SetTools sets the tools for tokenization.
+func (r *TokenizerRequest) SetTools(tools []chat.Tool) *TokenizerRequest {
+	r.Tools = tools
+	return r
+}
+
+// SetRequestID sets the request ID.
+func (r *TokenizerRequest) SetRequestID(requestID string) *TokenizerRequest {
+	r.RequestID = requestID
+	return r
+}
+
+// SetUserID sets the user ID.
+func (r *TokenizerRequest) SetUserID(userID string) *TokenizerRequest {
+	r.UserID = userID
+	return r
+}
+
+// TokenizerUsage represents token usage statistics.
+type TokenizerUsage struct {
+	// PromptTokens is the number of tokens in the prompt.
+	PromptTokens int `json:"prompt_tokens"`
+
+	// ImageTokens is the number of tokens for images.
+	ImageTokens int `json:"image_tokens,omitempty"`
+
+	// VideoTokens is the number of tokens for video.
+	VideoTokens int `json:"video_tokens,omitempty"`
+
+	// TotalTokens is the total number of tokens.
+	TotalTokens int `json:"total_tokens"`
+}
+
+// TokenizerResponse represents the response from the tokenizer API.
+type TokenizerResponse struct {
+	// ID is the task sequence number from the platform.
+	ID string `json:"id"`
+
+	// Usage contains the token count statistics.
+	Usage TokenizerUsage `json:"usage"`
+
+	// Created is the Unix timestamp.
+	Created int64 `json:"created,omitempty"`
+
+	// RequestID is the client-submitted or platform-generated identifier.
+	RequestID string `json:"request_id,omitempty"`
+}

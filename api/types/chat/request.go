@@ -54,11 +54,17 @@ type ChatCompletionRequest struct {
 	// LogitBias modifies the likelihood of specified tokens appearing.
 	LogitBias map[string]float64 `json:"logit_bias,omitempty"`
 
-	// User is a unique identifier for the end-user.
-	User string `json:"user,omitempty"`
+	// UserID is a unique identifier for the end-user (6-128 characters).
+	// Used for abuse detection and monitoring.
+	UserID string `json:"user_id,omitempty"`
 
 	// RequestID is a unique identifier for the request.
+	// If not provided, the platform will generate one automatically.
 	RequestID string `json:"request_id,omitempty"`
+
+	// ToolStream enables streaming of tool call responses.
+	// When true, function call parameters are streamed without buffering.
+	ToolStream *bool `json:"tool_stream,omitempty"`
 
 	// DoSample controls whether to use sampling.
 	DoSample *bool `json:"do_sample,omitempty"`
@@ -186,5 +192,26 @@ func (r *ChatCompletionRequest) EnablePreservedThinking() *ChatCompletionRequest
 		Type:          ThinkingTypeEnabled,
 		ClearThinking: &clearThinking,
 	}
+	return r
+}
+
+// SetUserID sets the end-user identifier.
+// The user ID should be 6-128 characters and is used for abuse detection.
+func (r *ChatCompletionRequest) SetUserID(userID string) *ChatCompletionRequest {
+	r.UserID = userID
+	return r
+}
+
+// SetRequestID sets the request identifier.
+// If not set, the platform will generate one automatically.
+func (r *ChatCompletionRequest) SetRequestID(requestID string) *ChatCompletionRequest {
+	r.RequestID = requestID
+	return r
+}
+
+// SetToolStream enables or disables streaming of tool call responses.
+// When enabled, function call parameters are streamed without buffering.
+func (r *ChatCompletionRequest) SetToolStream(stream bool) *ChatCompletionRequest {
+	r.ToolStream = &stream
 	return r
 }
