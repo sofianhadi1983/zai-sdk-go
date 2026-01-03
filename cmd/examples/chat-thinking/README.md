@@ -10,18 +10,26 @@ GLM's thinking feature enables the model to:
 - Verify its own work
 - Provide detailed explanations of its thought process
 
+**GLM-4.7** has thinking **enabled by default** as a native feature. You can control it with the `thinking` parameter.
+
 ## Features Demonstrated
 
-### 1. Basic Thinking (Complex Reasoning)
-Uses system prompts to encourage step-by-step reasoning for logic problems.
+### 1. GLM-4.7 Native Thinking (Default)
+Demonstrates GLM-4.7's built-in thinking capability, which is enabled by default.
 
-### 2. Mathematical Reasoning
+### 2. GLM-4.7 with Thinking Disabled
+Shows how to disable thinking for faster, more direct responses.
+
+### 3. Basic Thinking (Complex Reasoning)
+Uses system prompts to encourage step-by-step reasoning for logic problems with GLM-4-Plus.
+
+### 4. Mathematical Reasoning
 Shows how GLM can solve mathematical problems with detailed explanations.
 
-### 3. Step-by-Step Analysis
+### 5. Step-by-Step Analysis
 Demonstrates breaking down business scenarios into analytical steps.
 
-### 4. Streaming Thinking Process
+### 6. Streaming Thinking Process
 Real-time streaming of the model's reasoning process.
 
 ## Running the Example
@@ -42,7 +50,44 @@ go run main.go
 
 ## Key Techniques
 
-### 1. System Prompts for Reasoning
+### 1. Native Thinking Parameter (GLM-4.7)
+
+GLM-4.7 has thinking **enabled by default**. You can explicitly control it:
+
+```go
+// Default behavior - thinking is enabled
+req := &chat.ChatCompletionRequest{
+    Model:    "glm-4.7",
+    Messages: messages,
+    // Thinking is enabled by default, no need to set it
+}
+
+// Explicitly enable thinking (optional, as it's the default)
+req.EnableThinking()
+
+// Disable thinking for faster, more direct responses
+req.DisableThinking()
+
+// Or set it directly
+req.SetThinking(&chat.ThinkingConfig{
+    Type: chat.ThinkingTypeDisabled,
+})
+```
+
+**When to disable thinking:**
+- When you need faster responses
+- For simple questions that don't require deep reasoning
+- When you want more concise, direct answers
+
+**When to use thinking (default):**
+- Complex problem-solving
+- Mathematical reasoning
+- Step-by-step analysis
+- Tasks requiring verification
+
+### 2. System Prompts for Reasoning (GLM-4-Plus)
+
+For models without native thinking (like GLM-4-Plus), use system prompts:
 
 ```go
 messages := []chat.Message{
@@ -51,16 +96,21 @@ messages := []chat.Message{
 }
 ```
 
-### 2. Temperature Settings
+### 3. Temperature Settings
 
 For reasoning tasks, use lower temperatures (0.5-0.7):
 ```go
-req := chat.NewChatCompletionRequest("glm-4-plus", messages).
-    SetTemperature(0.5). // More focused reasoning
-    SetMaxTokens(2000)
+temp := 0.5 // More focused reasoning
+maxTokens := 2000
+req := &chat.ChatCompletionRequest{
+    Model:       "glm-4-plus",
+    Messages:    messages,
+    Temperature: &temp,
+    MaxTokens:   &maxTokens,
+}
 ```
 
-### 3. Structured Prompting
+### 4. Structured Prompting
 
 Guide the model's thinking process:
 ```go
@@ -72,7 +122,7 @@ chat.NewUserMessage(`Solve this problem step by step:
 5. Verify your reasoning`)
 ```
 
-### 4. Streaming for Real-Time Thinking
+### 5. Streaming for Real-Time Thinking
 
 ```go
 stream, err := client.Chat.CreateStream(ctx, req)
@@ -214,9 +264,49 @@ The model will:
 - [Message Types](https://pkg.go.dev/github.com/sofianhadi1983/zai-sdk-go/api/types/chat#Message)
 - [Streaming](https://pkg.go.dev/github.com/sofianhadi1983/zai-sdk-go/pkg/zai#ChatService.CreateStream)
 
+## GLM-4.7 Native Thinking vs Prompting
+
+### Native Thinking (GLM-4.7)
+
+**Enabled by default** - GLM-4.7 has built-in thinking capability:
+
+```go
+req := &chat.ChatCompletionRequest{
+    Model:    "glm-4.7",
+    Messages: messages,
+    // Thinking enabled by default
+}
+
+// Disable if needed
+req.DisableThinking()
+```
+
+**Advantages:**
+- No system prompts needed
+- More consistent reasoning behavior
+- Better integrated into the model
+- Can be controlled via API parameter
+
+### Prompting Approach (GLM-4-Plus, GLM-4-Air)
+
+For models without native thinking, use system prompts:
+
+```go
+messages := []chat.Message{
+    chat.NewSystemMessage("Think step-by-step before answering."),
+    chat.NewUserMessage("Your problem..."),
+}
+```
+
+**When to use:**
+- With GLM-4-Plus or GLM-4-Air
+- When you need custom reasoning instructions
+- For fine-grained control over thinking style
+
 ## Notes
 
-- GLM's thinking capability is enhanced by clear prompting rather than a specific parameter
-- The quality of reasoning depends on the model version (glm-4-plus recommended)
+- **GLM-4.7** has native thinking controlled via the `thinking` parameter
+- **Other models** (GLM-4-Plus, GLM-4-Air) use prompting for reasoning
+- The quality of reasoning depends on the model version
 - Streaming allows you to see the thinking process in real-time
 - Combining with function calling enables verified computational reasoning

@@ -22,27 +22,105 @@ func main() {
 
 	fmt.Println("=== GLM Thinking/Deep Thinking Examples ===\n")
 
-	// Example 1: Basic thinking with GLM-4-Plus
-	fmt.Println("Example 1: Complex reasoning task")
+	// Example 1: GLM-4.7 with native thinking (enabled by default)
+	fmt.Println("Example 1: GLM-4.7 Native Thinking (Default)")
+	glm47NativeThinkingExample(ctx, client)
+
+	fmt.Println("\n" + strings.Repeat("=", 60) + "\n")
+
+	// Example 2: GLM-4.7 with thinking disabled
+	fmt.Println("Example 2: GLM-4.7 with Thinking Disabled")
+	glm47DisabledThinkingExample(ctx, client)
+
+	fmt.Println("\n" + strings.Repeat("=", 60) + "\n")
+
+	// Example 3: Basic thinking with GLM-4-Plus
+	fmt.Println("Example 3: Complex reasoning task")
 	basicThinkingExample(ctx, client)
 
 	fmt.Println("\n" + strings.Repeat("=", 60) + "\n")
 
-	// Example 2: Mathematical problem solving
-	fmt.Println("Example 2: Mathematical reasoning")
+	// Example 4: Mathematical problem solving
+	fmt.Println("Example 4: Mathematical reasoning")
 	mathThinkingExample(ctx, client)
 
 	fmt.Println("\n" + strings.Repeat("=", 60) + "\n")
 
-	// Example 3: Step-by-step analysis
-	fmt.Println("Example 3: Step-by-step analysis")
+	// Example 5: Step-by-step analysis
+	fmt.Println("Example 5: Step-by-step analysis")
 	stepByStepExample(ctx, client)
 
 	fmt.Println("\n" + strings.Repeat("=", 60) + "\n")
 
-	// Example 4: Streaming thinking process
-	fmt.Println("Example 4: Streaming thinking (real-time)")
+	// Example 6: Streaming thinking process
+	fmt.Println("Example 6: Streaming thinking (real-time)")
 	streamingThinkingExample(ctx, client)
+}
+
+func glm47NativeThinkingExample(ctx context.Context, client *zai.Client) {
+	// GLM-4.7 has thinking enabled by default
+	// No need to explicitly enable it, but we can for clarity
+	messages := []chat.Message{
+		chat.NewUserMessage(`Solve this problem step by step:
+
+A farmer has chickens and rabbits. Together they have 50 heads and 140 legs.
+How many chickens and how many rabbits does the farmer have?
+
+Please show your thinking process.`),
+	}
+
+	temp := 0.7
+	maxTokens := 2000
+	req := &chat.ChatCompletionRequest{
+		Model:       "glm-4.7",
+		Messages:    messages,
+		Temperature: &temp,
+		MaxTokens:   &maxTokens,
+		// Thinking is enabled by default for GLM-4.7, but we can explicitly enable it:
+		// Thinking: &chat.ThinkingConfig{Type: chat.ThinkingTypeEnabled},
+	}
+
+	resp, err := client.Chat.Create(ctx, req)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return
+	}
+
+	fmt.Println("Response (with native thinking enabled):")
+	fmt.Println(resp.GetContent())
+	fmt.Printf("\nTokens used: %d\n", resp.Usage.TotalTokens)
+}
+
+func glm47DisabledThinkingExample(ctx context.Context, client *zai.Client) {
+	// Demonstrate disabling thinking for GLM-4.7
+	messages := []chat.Message{
+		chat.NewUserMessage(`Solve this problem:
+
+A farmer has chickens and rabbits. Together they have 50 heads and 140 legs.
+How many chickens and how many rabbits does the farmer have?`),
+	}
+
+	temp := 0.7
+	maxTokens := 2000
+	req := &chat.ChatCompletionRequest{
+		Model:       "glm-4.7",
+		Messages:    messages,
+		Temperature: &temp,
+		MaxTokens:   &maxTokens,
+	}
+
+	// Disable thinking for faster, more direct responses
+	req.DisableThinking()
+
+	resp, err := client.Chat.Create(ctx, req)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return
+	}
+
+	fmt.Println("Response (with thinking disabled):")
+	fmt.Println(resp.GetContent())
+	fmt.Printf("\nTokens used: %d\n", resp.Usage.TotalTokens)
 }
 
 func basicThinkingExample(ctx context.Context, client *zai.Client) {
@@ -57,9 +135,14 @@ How many chickens and how many rabbits does the farmer have?
 Please show your thinking process.`),
 	}
 
-	req := chat.NewChatCompletionRequest("glm-4-plus", messages).
-		SetTemperature(0.7).
-		SetMaxTokens(2000)
+	temp := 0.7
+	maxTokens := 2000
+	req := &chat.ChatCompletionRequest{
+		Model:       "glm-4-plus",
+		Messages:    messages,
+		Temperature: &temp,
+		MaxTokens:   &maxTokens,
+	}
 
 	resp, err := client.Chat.Create(ctx, req)
 	if err != nil {
@@ -84,9 +167,14 @@ Requirements:
 3. Verify your answer`),
 	}
 
-	req := chat.NewChatCompletionRequest("glm-4-plus", messages).
-		SetTemperature(0.5). // Lower temperature for more focused reasoning
-		SetMaxTokens(1500)
+	temp := 0.5 // Lower temperature for more focused reasoning
+	maxTokens := 1500
+	req := &chat.ChatCompletionRequest{
+		Model:       "glm-4-plus",
+		Messages:    messages,
+		Temperature: &temp,
+		MaxTokens:   &maxTokens,
+	}
 
 	resp, err := client.Chat.Create(ctx, req)
 	if err != nil {
@@ -117,9 +205,14 @@ If they started with $1,000,000 revenue at the beginning of the year,
 what was their final revenue? What was the overall percentage change?`),
 	}
 
-	req := chat.NewChatCompletionRequest("glm-4-plus", messages).
-		SetTemperature(0.6).
-		SetMaxTokens(2000)
+	temp := 0.6
+	maxTokens := 2000
+	req := &chat.ChatCompletionRequest{
+		Model:       "glm-4-plus",
+		Messages:    messages,
+		Temperature: &temp,
+		MaxTokens:   &maxTokens,
+	}
 
 	resp, err := client.Chat.Create(ctx, req)
 	if err != nil {
@@ -143,10 +236,16 @@ Explain your thinking:
 4. Show example code`),
 	}
 
-	req := chat.NewChatCompletionRequest("glm-4-plus", messages).
-		SetStream(true).
-		SetTemperature(0.7).
-		SetMaxTokens(2000)
+	streamFlag := true
+	temp := 0.7
+	maxTokens := 2000
+	req := &chat.ChatCompletionRequest{
+		Model:       "glm-4-plus",
+		Messages:    messages,
+		Stream:      &streamFlag,
+		Temperature: &temp,
+		MaxTokens:   &maxTokens,
+	}
 
 	stream, err := client.Chat.CreateStream(ctx, req)
 	if err != nil {
@@ -202,9 +301,13 @@ func reasoningWithToolsExample(ctx context.Context, client *zai.Client) {
 		chat.NewUserMessage("Calculate the compound interest on $10,000 at 5% annual rate for 10 years, compounded annually."),
 	}
 
-	req := chat.NewChatCompletionRequest("glm-4-plus", messages).
-		SetTools(tools).
-		SetTemperature(0.7)
+	temp := 0.7
+	req := &chat.ChatCompletionRequest{
+		Model:       "glm-4-plus",
+		Messages:    messages,
+		Tools:       tools,
+		Temperature: &temp,
+	}
 
 	resp, err := client.Chat.Create(ctx, req)
 	if err != nil {
@@ -213,14 +316,17 @@ func reasoningWithToolsExample(ctx context.Context, client *zai.Client) {
 	}
 
 	fmt.Println("Reasoning with Tools:")
-	if resp.HasToolCalls() {
+
+	// Check if the response has tool calls
+	if len(resp.Choices) > 0 && len(resp.Choices[0].Message.ToolCalls) > 0 {
 		fmt.Println("\nModel's reasoning led to tool calls:")
-		for i, toolCall := range resp.GetToolCalls() {
+		for i, toolCall := range resp.Choices[0].Message.ToolCalls {
 			fmt.Printf("\nTool Call %d:\n", i+1)
 			fmt.Printf("  Function: %s\n", toolCall.Function.Name)
 			fmt.Printf("  Arguments: %s\n", toolCall.Function.Arguments)
 		}
 	}
+
 	fmt.Println("\nResponse:")
 	fmt.Println(resp.GetContent())
 }

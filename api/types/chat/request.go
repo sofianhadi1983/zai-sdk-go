@@ -66,9 +66,27 @@ type ChatCompletionRequest struct {
 	// Seed is the random seed for deterministic generation.
 	Seed *int `json:"seed,omitempty"`
 
+	// Thinking controls the thinking mode for GLM-4.7 and later models.
+	// GLM-4.7 has thinking enabled by default. Use this to disable or configure it.
+	Thinking *ThinkingConfig `json:"thinking,omitempty"`
+
 	// Extra fields for model-specific parameters.
 	Extra map[string]interface{} `json:"-"`
 }
+
+// ThinkingConfig configures the thinking behavior for models that support it.
+// GLM-4.7 has thinking enabled by default.
+type ThinkingConfig struct {
+	// Type controls whether thinking is enabled or disabled.
+	// Possible values: "enabled" (default for GLM-4.7), "disabled"
+	Type string `json:"type,omitempty"`
+}
+
+// ThinkingType constants for thinking configuration.
+const (
+	ThinkingTypeEnabled  = "enabled"
+	ThinkingTypeDisabled = "disabled"
+)
 
 // SetTemperature sets the temperature parameter.
 func (r *ChatCompletionRequest) SetTemperature(temp float64) *ChatCompletionRequest {
@@ -130,5 +148,25 @@ func (r *ChatCompletionRequest) SetToolChoice(choice ToolChoice) *ChatCompletion
 // SetResponseFormat sets the response format.
 func (r *ChatCompletionRequest) SetResponseFormat(format ResponseFormat) *ChatCompletionRequest {
 	r.ResponseFormat = &format
+	return r
+}
+
+// SetThinking sets the thinking configuration.
+func (r *ChatCompletionRequest) SetThinking(config *ThinkingConfig) *ChatCompletionRequest {
+	r.Thinking = config
+	return r
+}
+
+// DisableThinking disables the thinking mode for GLM-4.7 and later models.
+// GLM-4.7 has thinking enabled by default, use this to disable it.
+func (r *ChatCompletionRequest) DisableThinking() *ChatCompletionRequest {
+	r.Thinking = &ThinkingConfig{Type: ThinkingTypeDisabled}
+	return r
+}
+
+// EnableThinking explicitly enables thinking mode.
+// Note: GLM-4.7 has thinking enabled by default, so this is optional.
+func (r *ChatCompletionRequest) EnableThinking() *ChatCompletionRequest {
+	r.Thinking = &ThinkingConfig{Type: ThinkingTypeEnabled}
 	return r
 }

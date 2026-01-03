@@ -126,9 +126,9 @@ func parametersExample(ctx context.Context, client *zai.Client) {
 	}
 
 	// Set parameters using chained methods
-	req.SetTemperature(0.9).     // Higher temperature for more creative output
-					SetMaxTokens(100).       // Limit response length
-					SetTopP(0.95)            // Nucleus sampling
+	req.SetTemperature(0.9). // Higher temperature for more creative output
+					SetMaxTokens(100). // Limit response length
+					SetTopP(0.95)      // Nucleus sampling
 
 	resp, err := client.Chat.Create(ctx, req)
 	if err != nil {
