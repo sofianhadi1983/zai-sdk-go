@@ -12,7 +12,10 @@ import (
 
 func main() {
 	// Create client from environment variables
-	client, err := zai.NewClientFromEnv()
+	client, err := zai.NewClient(
+		zai.WithAPIKey("your-secret"),
+		zai.WithBaseURL("https://api.z.ai/api/coding/paas/v4"),
+	)
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
