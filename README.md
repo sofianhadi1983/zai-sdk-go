@@ -2,6 +2,9 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/sofianhadi1983/zai-sdk-go.svg)](https://pkg.go.dev/github.com/sofianhadi1983/zai-sdk-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/sofianhadi1983/zai-sdk-go)](https://goreportcard.com/report/github.com/sofianhadi1983/zai-sdk-go)
+[![Test](https://github.com/sofianhadi1983/zai-sdk-go/actions/workflows/test.yml/badge.svg)](https://github.com/sofianhadi1983/zai-sdk-go/actions/workflows/test.yml)
+[![Security](https://github.com/sofianhadi1983/zai-sdk-go/actions/workflows/security.yml/badge.svg)](https://github.com/sofianhadi1983/zai-sdk-go/actions/workflows/security.yml)
+[![codecov](https://codecov.io/gh/sofianhadi1983/zai-sdk-go/branch/main/graph/badge.svg)](https://codecov.io/gh/sofianhadi1983/zai-sdk-go)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Official Go SDK for the Z.ai API (智谱AI). This library provides a comprehensive and idiomatic Go interface to all Z.ai API endpoints, including chat completions, embeddings, image generation, and more.
