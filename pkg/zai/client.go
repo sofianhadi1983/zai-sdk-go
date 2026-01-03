@@ -57,6 +57,9 @@ type Client struct {
 
 	// OCR provides access to the OCR API.
 	OCR *OCRService
+
+	// FileParser provides access to the File Parser API.
+	FileParser *FileParserService
 }
 
 // ClientConfig holds configuration for the SDK client.
@@ -243,6 +246,7 @@ func newClient(config *ClientConfig) (*Client, error) {
 	c.Agents = newAgentsService(baseClient)
 	c.Voice = newVoiceService(baseClient)
 	c.OCR = newOCRService(baseClient)
+	c.FileParser = newFileParserService(baseClient)
 
 	return c, nil
 }
