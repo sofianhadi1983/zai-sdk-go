@@ -33,6 +33,9 @@ test-cover:
 	$(GOTEST) -v -short -race -coverprofile=$(COVERAGE_FILE) -covermode=atomic ./...
 	$(GOCMD) tool cover -html=$(COVERAGE_FILE) -o $(COVERAGE_HTML)
 	@echo "Coverage report generated: $(COVERAGE_HTML)"
+	@echo "Checking coverage threshold..."
+	@go tool cover -func=$(COVERAGE_FILE) | grep total | awk '{print substr($$3, 1, length($$3)-1)}' | \
+		awk '{if ($$1 < 80) {print "❌ Coverage " $$1 "% is below minimum threshold of 80%"; exit 1} else {print "✅ Coverage " $$1 "% meets minimum threshold of 80%"}}'
 
 ## test-integration: Run integration tests (requires API key)
 test-integration:
