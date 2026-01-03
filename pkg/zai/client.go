@@ -51,6 +51,9 @@ type Client struct {
 
 	// Agents provides access to the Agents API.
 	Agents *AgentsService
+
+	// Voice provides access to the Voice API.
+	Voice *VoiceService
 }
 
 // ClientConfig holds configuration for the SDK client.
@@ -235,6 +238,7 @@ func newClient(config *ClientConfig) (*Client, error) {
 	c.Moderations = newModerationsService(baseClient)
 	c.Tools = newToolsService(baseClient)
 	c.Agents = newAgentsService(baseClient)
+	c.Voice = newVoiceService(baseClient)
 
 	return c, nil
 }
