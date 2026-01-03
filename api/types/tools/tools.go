@@ -1,7 +1,7 @@
 // Package tools provides types for the Tools API.
 package tools
 
-import "github.com/z-ai/zai-sdk-go/api/types/chat"
+import "github.com/sofianhadi1983/zai-sdk-go/api/types/chat"
 
 // WebSearchRequest represents a request to perform web search using AI models.
 type WebSearchRequest struct {

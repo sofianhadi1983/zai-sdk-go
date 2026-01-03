@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	embeddingstypes "github.com/z-ai/zai-sdk-go/api/types/embeddings"
+	embeddingstypes "github.com/sofianhadi1983/zai-sdk-go/api/types/embeddings"
 )
 
 func TestEmbeddingsService_Create(t *testing.T) {

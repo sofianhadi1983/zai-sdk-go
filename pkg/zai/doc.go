@@ -5,7 +5,7 @@
 //
 // # Installation
 //
-//	go get github.com/z-ai/zai-sdk-go
+//	go get github.com/sofianhadi1983/zai-sdk-go
 //
 // # Quick Start
 //
@@ -46,7 +46,7 @@
 // All API errors implement the error interface and can be checked using
 // the errors package:
 //
-//	import "github.com/z-ai/zai-sdk-go/pkg/zai/errors"
+//	import "github.com/sofianhadi1983/zai-sdk-go/pkg/zai/errors"
 //
 //	resp, err := client.Chat.Create(ctx, req)
 //	if err != nil {
@@ -69,7 +69,7 @@
 // # More Information
 //
 // For detailed documentation and examples, see:
-//   - API Reference: https://pkg.go.dev/github.com/z-ai/zai-sdk-go
+//   - API Reference: https://pkg.go.dev/github.com/sofianhadi1983/zai-sdk-go
 //   - Official Docs: https://docs.z.ai/
-//   - GitHub: https://github.com/z-ai/zai-sdk-go
+//   - GitHub: https://github.com/sofianhadi1983/zai-sdk-go
 package zai

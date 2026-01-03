@@ -3,8 +3,8 @@ package zai
 import (
 	"context"
 
-	"github.com/z-ai/zai-sdk-go/api/types/embeddings"
-	"github.com/z-ai/zai-sdk-go/internal/client"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/embeddings"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/client"
 )
 
 // EmbeddingsService provides access to the Embeddings API.

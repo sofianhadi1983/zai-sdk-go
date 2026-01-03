@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/z-ai/zai-sdk-go/api/types/moderation"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/moderation"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

@@ -3,8 +3,8 @@ package zai
 import (
 	"context"
 
-	"github.com/z-ai/zai-sdk-go/api/types/moderation"
-	"github.com/z-ai/zai-sdk-go/internal/client"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/moderation"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/client"
 )
 
 // ModerationsService provides access to the Moderations API.

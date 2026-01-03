@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/z-ai/zai-sdk-go/api/types/chat"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/chat"
 )
 
 func TestChatService_Create(t *testing.T) {

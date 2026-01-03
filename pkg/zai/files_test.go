@@ -11,7 +11,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	filestypes "github.com/z-ai/zai-sdk-go/api/types/files"
+	filestypes "github.com/sofianhadi1983/zai-sdk-go/api/types/files"
 )
 
 func TestFilesService_Upload(t *testing.T) {

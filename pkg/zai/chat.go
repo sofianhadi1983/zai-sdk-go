@@ -3,9 +3,9 @@ package zai
 import (
 	"context"
 
-	"github.com/z-ai/zai-sdk-go/api/types/chat"
-	"github.com/z-ai/zai-sdk-go/internal/client"
-	"github.com/z-ai/zai-sdk-go/internal/streaming"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/chat"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/client"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/streaming"
 )
 
 // ChatService provides access to the Chat Completions API.

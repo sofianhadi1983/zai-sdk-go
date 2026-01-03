@@ -1,7 +1,7 @@
 // Package embeddings provides types for the Embeddings API.
 package embeddings
 
-import "github.com/z-ai/zai-sdk-go/internal/models"
+import "github.com/sofianhadi1983/zai-sdk-go/internal/models"
 
 // EmbeddingRequest represents a request to create embeddings.
 type EmbeddingRequest struct {

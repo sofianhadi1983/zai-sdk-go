@@ -1,4 +1,4 @@
-module github.com/z-ai/zai-sdk-go
+module github.com/sofianhadi1983/zai-sdk-go
 
 go 1.25.5
 

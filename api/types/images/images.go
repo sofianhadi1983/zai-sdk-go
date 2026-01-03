@@ -1,7 +1,7 @@
 // Package images provides types for the Images API.
 package images
 
-import "github.com/z-ai/zai-sdk-go/internal/models"
+import "github.com/sofianhadi1983/zai-sdk-go/internal/models"
 
 // ImageSize represents the size of the generated image.
 type ImageSize string

@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	batchTypes "github.com/z-ai/zai-sdk-go/api/types/batch"
+	batchTypes "github.com/sofianhadi1983/zai-sdk-go/api/types/batch"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

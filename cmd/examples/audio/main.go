@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/z-ai/zai-sdk-go/api/types/audio"
-	"github.com/z-ai/zai-sdk-go/pkg/zai"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/audio"
+	"github.com/sofianhadi1983/zai-sdk-go/pkg/zai"
 )
 
 func main() {

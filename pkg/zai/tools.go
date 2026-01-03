@@ -3,9 +3,9 @@ package zai
 import (
 	"context"
 
-	"github.com/z-ai/zai-sdk-go/api/types/tools"
-	"github.com/z-ai/zai-sdk-go/internal/client"
-	streaming "github.com/z-ai/zai-sdk-go/internal/streaming"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/tools"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/client"
+	streaming "github.com/sofianhadi1983/zai-sdk-go/internal/streaming"
 )
 
 // ToolsService provides access to the Tools API.

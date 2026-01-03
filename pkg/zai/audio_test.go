@@ -11,7 +11,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/z-ai/zai-sdk-go/api/types/audio"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/audio"
 )
 
 func TestAudioService_Transcribe_JSON(t *testing.T) {

@@ -5,10 +5,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/z-ai/zai-sdk-go/internal/client"
-	"github.com/z-ai/zai-sdk-go/internal/constants"
-	"github.com/z-ai/zai-sdk-go/internal/logger"
-	"github.com/z-ai/zai-sdk-go/pkg/zai/errors"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/client"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/constants"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/logger"
+	"github.com/sofianhadi1983/zai-sdk-go/pkg/zai/errors"
 )
 
 // Client is the main SDK client for Z.ai API.

@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/z-ai/zai-sdk-go/api/types/assistant"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/assistant"
 )
 
 func TestAssistantService_Conversation(t *testing.T) {

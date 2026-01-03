@@ -11,8 +11,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/z-ai/zai-sdk-go/internal/constants"
-	"github.com/z-ai/zai-sdk-go/internal/logger"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/constants"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/logger"
 )
 
 // RetryConfig holds configuration for retry behavior.

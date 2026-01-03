@@ -3,8 +3,8 @@ package zai
 import (
 	"context"
 
-	"github.com/z-ai/zai-sdk-go/api/types/websearch"
-	"github.com/z-ai/zai-sdk-go/internal/client"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/websearch"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/client"
 )
 
 // WebSearchService provides access to the Web Search API.

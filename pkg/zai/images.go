@@ -3,8 +3,8 @@ package zai
 import (
 	"context"
 
-	"github.com/z-ai/zai-sdk-go/api/types/images"
-	"github.com/z-ai/zai-sdk-go/internal/client"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/images"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/client"
 )
 
 // ImagesService provides access to the Images API.

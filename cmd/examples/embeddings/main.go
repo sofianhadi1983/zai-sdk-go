@@ -6,8 +6,8 @@ import (
 	"log"
 	"math"
 
-	"github.com/z-ai/zai-sdk-go/api/types/embeddings"
-	"github.com/z-ai/zai-sdk-go/pkg/zai"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/embeddings"
+	"github.com/sofianhadi1983/zai-sdk-go/pkg/zai"
 )
 
 func main() {

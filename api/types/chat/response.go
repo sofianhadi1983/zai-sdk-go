@@ -1,6 +1,6 @@
 package chat
 
-import "github.com/z-ai/zai-sdk-go/internal/models"
+import "github.com/sofianhadi1983/zai-sdk-go/internal/models"
 
 // ChatCompletionResponse represents the response from a chat completion request.
 type ChatCompletionResponse struct {

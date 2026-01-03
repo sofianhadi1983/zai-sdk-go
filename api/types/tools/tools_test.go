@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/z-ai/zai-sdk-go/api/types/chat"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/chat"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

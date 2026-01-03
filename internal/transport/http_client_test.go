@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/z-ai/zai-sdk-go/internal/constants"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/constants"
 )
 
 func TestDefaultHTTPClientConfig(t *testing.T) {

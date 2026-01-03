@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	imagestypes "github.com/z-ai/zai-sdk-go/api/types/images"
+	imagestypes "github.com/sofianhadi1983/zai-sdk-go/api/types/images"
 )
 
 func TestImagesService_Create(t *testing.T) {

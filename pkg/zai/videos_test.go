@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	videostypes "github.com/z-ai/zai-sdk-go/api/types/videos"
+	videostypes "github.com/sofianhadi1983/zai-sdk-go/api/types/videos"
 )
 
 func TestVideosService_Create(t *testing.T) {

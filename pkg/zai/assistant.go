@@ -3,9 +3,9 @@ package zai
 import (
 	"context"
 
-	"github.com/z-ai/zai-sdk-go/api/types/assistant"
-	"github.com/z-ai/zai-sdk-go/internal/client"
-	"github.com/z-ai/zai-sdk-go/internal/streaming"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/assistant"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/client"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/streaming"
 )
 
 // AssistantService provides access to the Assistant API.

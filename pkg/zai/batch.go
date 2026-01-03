@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/z-ai/zai-sdk-go/api/types/batch"
-	"github.com/z-ai/zai-sdk-go/internal/client"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/batch"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/client"
 )
 
 // BatchService provides access to the Batch API.

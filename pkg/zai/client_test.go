@@ -7,8 +7,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/z-ai/zai-sdk-go/internal/constants"
-	"github.com/z-ai/zai-sdk-go/internal/logger"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/constants"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/logger"
 )
 
 func TestNewClient(t *testing.T) {

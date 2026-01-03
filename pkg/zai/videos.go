@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/z-ai/zai-sdk-go/api/types/videos"
-	"github.com/z-ai/zai-sdk-go/internal/client"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/videos"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/client"
 )
 
 // VideosService provides access to the Videos API.

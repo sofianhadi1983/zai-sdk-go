@@ -9,13 +9,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/z-ai/zai-sdk-go/internal/auth"
-	"github.com/z-ai/zai-sdk-go/internal/constants"
-	"github.com/z-ai/zai-sdk-go/internal/logger"
-	"github.com/z-ai/zai-sdk-go/internal/models"
-	"github.com/z-ai/zai-sdk-go/internal/streaming"
-	"github.com/z-ai/zai-sdk-go/internal/transport"
-	"github.com/z-ai/zai-sdk-go/pkg/zai/errors"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/auth"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/constants"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/logger"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/models"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/streaming"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/transport"
+	"github.com/sofianhadi1983/zai-sdk-go/pkg/zai/errors"
 )
 
 // Config holds configuration for the API client.

@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/z-ai/zai-sdk-go/test/helpers"
+	"github.com/sofianhadi1983/zai-sdk-go/test/helpers"
 )
 
 func TestAssertNoError(t *testing.T) {

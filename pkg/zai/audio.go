@@ -7,8 +7,8 @@ import (
 	"io"
 	"mime/multipart"
 
-	"github.com/z-ai/zai-sdk-go/api/types/audio"
-	"github.com/z-ai/zai-sdk-go/internal/client"
+	"github.com/sofianhadi1983/zai-sdk-go/api/types/audio"
+	"github.com/sofianhadi1983/zai-sdk-go/internal/client"
 )
 
 // AudioService provides access to the Audio API.

@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/z-ai/zai-sdk-go/test/helpers"
+	"github.com/sofianhadi1983/zai-sdk-go/test/helpers"
 )
 
 // This file demonstrates table-driven test patterns for the Z.ai Go SDK.
