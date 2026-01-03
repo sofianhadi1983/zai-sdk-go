@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-01-03
+
 ### Added
 - Initial implementation of Z.ai Go SDK
 - Support for all 15 Z.ai API services:
@@ -45,6 +47,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migration guide for Python SDK users
 - GoDoc comments with examples for all exported functions
 - Best practices and common patterns documentation
+- RELEASING.md with complete release process guide
+- CHANGELOG.md with semantic versioning strategy
+
+### CI/CD
+- GitHub Actions workflows for testing, security, and releases
+- Multi-platform testing (Ubuntu, macOS, Windows) across Go 1.21-1.23
+- Automated security scanning (govulncheck, gosec, OSV Scanner, Trivy)
+- Performance regression tracking with benchmarks
+- Dependabot for automated dependency updates
+- Codecov integration for coverage reporting
 
 ## Versioning Strategy
 
