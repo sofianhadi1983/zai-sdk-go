@@ -33,6 +33,9 @@ type Client struct {
 
 	// Audio provides access to the Audio API.
 	Audio *AudioService
+
+	// Assistant provides access to the Assistant API.
+	Assistant *AssistantService
 }
 
 // ClientConfig holds configuration for the SDK client.
@@ -211,6 +214,7 @@ func newClient(config *ClientConfig) (*Client, error) {
 	c.Files = newFilesService(baseClient)
 	c.Videos = newVideosService(baseClient)
 	c.Audio = newAudioService(baseClient)
+	c.Assistant = newAssistantService(baseClient)
 
 	return c, nil
 }
