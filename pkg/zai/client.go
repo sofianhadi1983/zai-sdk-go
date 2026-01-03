@@ -42,6 +42,9 @@ type Client struct {
 
 	// WebSearch provides access to the Web Search API.
 	WebSearch *WebSearchService
+
+	// Moderations provides access to the Moderations API.
+	Moderations *ModerationsService
 }
 
 // ClientConfig holds configuration for the SDK client.
@@ -223,6 +226,7 @@ func newClient(config *ClientConfig) (*Client, error) {
 	c.Assistant = newAssistantService(baseClient)
 	c.Batch = newBatchService(baseClient)
 	c.WebSearch = newWebSearchService(baseClient)
+	c.Moderations = newModerationsService(baseClient)
 
 	return c, nil
 }
