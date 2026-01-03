@@ -1,4 +1,4 @@
-.PHONY: all build test test-cover test-integration lint format clean help
+.PHONY: all build test test-cover test-integration lint lint-fix format vet clean help install-tools pre-commit-install
 
 # Variables
 BINARY_NAME=zai-sdk-go
@@ -42,14 +42,20 @@ test-integration:
 ## lint: Run linters
 lint:
 	@echo "Running linters..."
-	@which golangci-lint > /dev/null || (echo "golangci-lint not installed. Install with: brew install golangci-lint" && exit 1)
-	golangci-lint run ./...
+	@which golangci-lint > /dev/null || (echo "golangci-lint not installed. Run: make install-tools" && exit 1)
+	golangci-lint run --config=.golangci.yml ./...
+
+## lint-fix: Run linters and auto-fix issues
+lint-fix:
+	@echo "Running linters with auto-fix..."
+	@which golangci-lint > /dev/null || (echo "golangci-lint not installed. Run: make install-tools" && exit 1)
+	golangci-lint run --config=.golangci.yml --fix ./...
 
 ## format: Format code
 format:
 	@echo "Formatting code..."
 	$(GOFMT) ./...
-	@which goimports > /dev/null && goimports -w . || echo "goimports not found, skipping import formatting"
+	@which goimports > /dev/null && goimports -w -local github.com/z-ai/zai-sdk-go . || echo "goimports not found, run: make install-tools"
 
 ## vet: Run go vet
 vet:
@@ -78,6 +84,28 @@ deps-update:
 	@echo "Updating dependencies..."
 	$(GOGET) -u ./...
 	$(GOMOD) tidy
+
+## install-tools: Install development tools
+install-tools:
+	@echo "Installing development tools..."
+	@echo "Installing golangci-lint..."
+	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	@echo "Installing goimports..."
+	@go install golang.org/x/tools/cmd/goimports@latest
+	@echo "Installing mockgen..."
+	@go install go.uber.org/mock/mockgen@latest
+	@echo "✅ All tools installed!"
+
+## pre-commit-install: Install pre-commit hook
+pre-commit-install:
+	@echo "Installing pre-commit hook..."
+	@cp .pre-commit-hook.sh .git/hooks/pre-commit
+	@chmod +x .git/hooks/pre-commit
+	@echo "✅ Pre-commit hook installed!"
+
+## check: Run all checks (format, vet, lint, test)
+check: format vet lint test
+	@echo "✅ All checks passed!"
 
 ## help: Display this help message
 help:

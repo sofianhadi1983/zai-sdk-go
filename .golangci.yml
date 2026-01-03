@@ -1,0 +1,274 @@
+# golangci-lint configuration
+# Reference: https://golangci-lint.run/usage/configuration/
+
+run:
+  # Timeout for analysis
+  timeout: 5m
+
+  # Include test files
+  tests: true
+
+  # Which dirs to skip
+  skip-dirs:
+    - vendor
+    - third_party
+
+  # Which files to skip
+  skip-files:
+    - ".*\\.pb\\.go$"
+    - ".*_generated\\.go$"
+
+  # Go version to target
+  go: '1.23'
+
+# Output configuration
+output:
+  # Format: colored-line-number|line-number|json|tab|checkstyle|code-climate
+  formats:
+    - format: colored-line-number
+
+  # Print lines of code with issue
+  print-issued-lines: true
+
+  # Print linter name in the end of issue text
+  print-linter-name: true
+
+  # Make issues output unique by line
+  uniq-by-line: true
+
+  # Sort results by: filepath, line and column
+  sort-results: true
+
+# Linters configuration
+linters:
+  # Disable all linters by default
+  disable-all: true
+
+  # Enable specific linters
+  enable:
+    # Enabled by default linters:
+    - errcheck     # Check for unchecked errors
+    - gosimple     # Simplify code
+    - govet        # Reports suspicious constructs
+    - ineffassign  # Detect ineffectual assignments
+    - staticcheck  # Go vet on steroids
+    - unused       # Check for unused constants, variables, functions and types
+
+    # Additional linters:
+    - gofmt        # Check whether code was gofmt-ed
+    - goimports    # Check import statements are formatted according to goimport
+    - gosec        # Inspect source code for security problems
+    - misspell     # Find commonly misspelled English words
+    - revive       # Fast, configurable, extensible, flexible, and beautiful linter for Go
+    - typecheck    # Like the front-end of a Go compiler, parses and type-checks Go code
+    - unparam      # Report unused function parameters
+    - goconst      # Find repeated strings that could be replaced by a constant
+    - gocyclo      # Compute and check the cyclomatic complexity of functions
+    - dupl         # Tool for code clone detection
+    - prealloc     # Find slice declarations that could potentially be preallocated
+    - unconvert    # Remove unnecessary type conversions
+    - wastedassign # Find wasted assignment statements
+    - nolintlint   # Report ill-formed or insufficient nolint directives
+    - bodyclose    # Check whether HTTP response body is closed successfully
+    - exportloopref # Check for pointers to enclosing loop variables
+    - gocritic     # Provides diagnostics that check for bugs, performance and style issues
+
+linters-settings:
+  # Settings for errcheck
+  errcheck:
+    # Report about not checking of errors in type assertions: `a := b.(MyStruct)`
+    check-type-assertions: true
+
+    # Report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`
+    check-blank: false
+
+    # List of functions to exclude from checking
+    exclude-functions:
+      - (*database/sql.Rows).Close
+      - (*database/sql.DB).Close
+
+  # Settings for govet
+  govet:
+    # Report about shadowed variables
+    check-shadowing: true
+
+    # Enable all analyzers
+    enable-all: true
+
+  # Settings for goimports
+  goimports:
+    # Put imports beginning with prefix after 3rd-party packages
+    local-prefixes: github.com/z-ai/zai-sdk-go
+
+  # Settings for gofmt
+  gofmt:
+    # Simplify code: gofmt with `-s` option
+    simplify: true
+
+  # Settings for gosec
+  gosec:
+    # To select a subset of rules to run
+    includes: []
+    # To specify a set of rules to explicitly exclude
+    excludes:
+      - G104 # Audit errors not checked - covered by errcheck
+    # Confidence threshold
+    confidence: medium
+
+  # Settings for revive
+  revive:
+    # Maximum number of open files at the same time
+    max-open-files: 2048
+
+    # When set to false, ignores files with "GENERATED" header
+    ignore-generated-header: true
+
+    # Sets the default severity to "warning"
+    severity: warning
+
+    # Sets the default failure confidence
+    confidence: 0.8
+
+    # Enable all available rules
+    rules:
+      - name: blank-imports
+      - name: context-as-argument
+      - name: context-keys-type
+      - name: dot-imports
+      - name: error-return
+      - name: error-strings
+      - name: error-naming
+      - name: exported
+      - name: if-return
+      - name: increment-decrement
+      - name: var-naming
+      - name: var-declaration
+      - name: package-comments
+      - name: range
+      - name: receiver-naming
+      - name: time-naming
+      - name: unexported-return
+      - name: indent-error-flow
+      - name: errorf
+      - name: empty-block
+      - name: superfluous-else
+      - name: unused-parameter
+      - name: unreachable-code
+      - name: redefines-builtin-id
+
+  # Settings for gocyclo
+  gocyclo:
+    # Minimal code complexity to report
+    min-complexity: 15
+
+  # Settings for goconst
+  goconst:
+    # Minimal length of string constant
+    min-len: 3
+    # Minimum occurrences of constant string count to trigger issue
+    min-occurrences: 3
+
+  # Settings for misspell
+  misspell:
+    # Correct spellings using locale preferences for US or UK
+    locale: US
+
+  # Settings for unused
+  unused:
+    # Treat code as a program (not a library)
+    check-exported: false
+
+  # Settings for unparam
+  unparam:
+    # Inspect exported functions
+    check-exported: false
+
+  # Settings for nolintlint
+  nolintlint:
+    # Enable to ensure that nolint directives are all used
+    allow-unused: false
+    # Require an explanation for nolint directives
+    require-explanation: true
+    # Require nolint directives to mention the specific linter being suppressed
+    require-specific: true
+
+  # Settings for gocritic
+  gocritic:
+    # Enable multiple checks by tags
+    enabled-tags:
+      - diagnostic
+      - style
+      - performance
+      - experimental
+      - opinionated
+
+    # Disable specific checks
+    disabled-checks:
+      - whyNoLint # Conflicts with nolintlint
+
+issues:
+  # List of regexps of issue texts to exclude
+  exclude:
+    # Exclude some linters from running on tests files
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+
+  # Excluding configuration per-path, per-linter, per-text and per-source
+  exclude-rules:
+    # Exclude some linters from running on tests files
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+        - goconst
+
+    # Exclude known linters from partially hard-vendored code
+    - path: internal/hmac/
+      text: "weak cryptographic primitive"
+      linters:
+        - gosec
+
+    # Exclude shadow checking on err variable
+    - linters:
+        - govet
+      text: 'shadow: declaration of "err"'
+
+    # Exclude lll issues for long lines with go:generate
+    - linters:
+        - lll
+      source: "^//go:generate "
+
+  # Independently of option `exclude` golangci-lint uses default exclude patterns
+  exclude-use-default: false
+
+  # Maximum issues count per one linter
+  max-issues-per-linter: 0
+
+  # Maximum count of issues with the same text
+  max-same-issues: 0
+
+  # Show only new issues
+  new: false
+
+  # Fix found issues (if it's supported by the linter)
+  fix: false
+
+# Settings for severity
+severity:
+  # Default value is empty string
+  default-severity: error
+
+  # If set to true severity-rules regular expressions become case-sensitive
+  case-sensitive: false
+
+  # Default value is empty list
+  rules:
+    - linters:
+        - dupl
+      severity: info
