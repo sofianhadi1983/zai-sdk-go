@@ -36,6 +36,9 @@ type Client struct {
 
 	// Assistant provides access to the Assistant API.
 	Assistant *AssistantService
+
+	// Batch provides access to the Batch API.
+	Batch *BatchService
 }
 
 // ClientConfig holds configuration for the SDK client.
@@ -215,6 +218,7 @@ func newClient(config *ClientConfig) (*Client, error) {
 	c.Videos = newVideosService(baseClient)
 	c.Audio = newAudioService(baseClient)
 	c.Assistant = newAssistantService(baseClient)
+	c.Batch = newBatchService(baseClient)
 
 	return c, nil
 }
