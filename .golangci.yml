@@ -19,7 +19,7 @@ run:
     - ".*_generated\\.go$"
 
   # Go version to target
-  go: '1.23'
+  go: '1.25'
 
 # Output configuration
 output:
@@ -208,14 +208,7 @@ linters-settings:
 
 issues:
   # List of regexps of issue texts to exclude
-  exclude:
-    # Exclude some linters from running on tests files
-    - path: _test\.go
-      linters:
-        - gocyclo
-        - errcheck
-        - dupl
-        - gosec
+  exclude: []
 
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
