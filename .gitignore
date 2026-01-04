@@ -41,6 +41,9 @@ coverage.html
 .env.local
 .env.*.local
 
+# Claude Code guidance (local only)
+CLAUDE.md
+
 # Temporary files
 *.tmp
 *.log
