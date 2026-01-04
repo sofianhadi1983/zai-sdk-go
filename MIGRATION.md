@@ -526,6 +526,6 @@ resp, err := client.Chat.Create(ctx, req)
 
 If you have questions or issues:
 
-- Check the [examples directory](cmd/examples/) for working code
+- Check the [examples directory](examples/) for working code
 - Open an issue on [GitHub](https://github.com/sofianhadi1983/zai-sdk-go/issues)
 - Review the [Go SDK API documentation](https://pkg.go.dev/github.com/sofianhadi1983/zai-sdk-go)

@@ -81,7 +81,7 @@ jobs:
       - name: Build examples
         run: |
           mkdir -p dist/examples
-          for example in cmd/examples/*/; do
+          for example in examples/*/; do
             example_name=$(basename "$example")
             echo "Building example: $example_name"
             go build -o "dist/examples/$example_name" "$example"

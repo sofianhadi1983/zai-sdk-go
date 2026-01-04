@@ -116,7 +116,7 @@ jobs:
 
       - name: Build examples
         run: |
-          for example in cmd/examples/*/; do
+          for example in examples/*/; do
             echo "Building $example"
             go build -v "./$example"
           done

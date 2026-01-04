@@ -510,24 +510,24 @@ client, err := zai.NewClient(
 
 ## Examples
 
-Complete working examples are available in the [`cmd/examples`](cmd/examples) directory:
+Complete working examples are available in the [`examples`](examples) directory:
 
-- [Chat](cmd/examples/chat) - Chat completions (basic, streaming, function calling)
-- [Embeddings](cmd/examples/embeddings) - Text embeddings
-- [Images](cmd/examples/images) - Image generation
-- [Files](cmd/examples/files) - File upload and management
-- [Videos](cmd/examples/videos) - Video generation
-- [Audio](cmd/examples/audio) - Audio transcription
-- [Assistant](cmd/examples/assistant) - AI assistants
-- [Batch](cmd/examples/batch) - Batch processing
-- [Web Search](cmd/examples/websearch) - Web search
-- [Moderations](cmd/examples/moderations) - Content moderation
-- [Tools](cmd/examples/tools) - Function calling
-- [Agents](cmd/examples/agents) - Agent invocation
-- [Voice](cmd/examples/voice) - Voice cloning
-- [OCR](cmd/examples/ocr) - Handwriting recognition
-- [File Parser](cmd/examples/fileparser) - Document parsing
-- [Web Reader](cmd/examples/webreader) - Web content extraction
+- [Chat](examples/chat) - Chat completions (basic, streaming, function calling)
+- [Embeddings](examples/embeddings) - Text embeddings
+- [Images](examples/images) - Image generation
+- [Files](examples/files) - File upload and management
+- [Videos](examples/videos) - Video generation
+- [Audio](examples/audio) - Audio transcription
+- [Assistant](examples/assistant) - AI assistants
+- [Batch](examples/batch) - Batch processing
+- [Web Search](examples/websearch) - Web search
+- [Moderations](examples/moderations) - Content moderation
+- [Tools](examples/tools) - Function calling
+- [Agents](examples/agents) - Agent invocation
+- [Voice](examples/voice) - Voice cloning
+- [OCR](examples/ocr) - Handwriting recognition
+- [File Parser](examples/fileparser) - Document parsing
+- [Web Reader](examples/webreader) - Web content extraction
 
 ## Contributing
 
@@ -560,7 +560,7 @@ go test -v ./pkg/zai -run TestChatService
 export ZAI_API_KEY="your-api-key.your-secret"
 
 # Run an example
-go run cmd/examples/chat/main.go
+go run examples/chat/main.go
 ```
 
 ## License

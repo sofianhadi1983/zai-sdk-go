@@ -47,7 +47,7 @@ export ZAI_API_KEY="your-api-key.your-secret"
 ### Run the Example
 
 ```bash
-cd cmd/examples/chat-thinking
+cd examples/chat-thinking
 go run main.go
 ```
 

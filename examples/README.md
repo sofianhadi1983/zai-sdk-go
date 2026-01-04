@@ -236,7 +236,7 @@ req := resource.NewRequest(params).
 
 If you have additional example ideas or improvements:
 
-1. Create a new directory under `cmd/examples/`
+1. Create a new directory under `examples/`
 2. Add a `main.go` with clear comments and error handling
 3. Test the example with real API credentials
 4. Submit a pull request
