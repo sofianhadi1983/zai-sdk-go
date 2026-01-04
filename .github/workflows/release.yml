@@ -35,7 +35,7 @@ jobs:
         run: go test -v -race ./...
 
       - name: Run linters
-        uses: golangci/golangci-lint-action@v4
+        uses: golangci/golangci-lint-action@v9
         with:
           version: latest
           args: --timeout=5m
