@@ -8,18 +8,8 @@ run:
   # Include test files
   tests: true
 
-  # Which dirs to skip
-  skip-dirs:
-    - vendor
-    - third_party
-
-  # Which files to skip
-  skip-files:
-    - ".*\\.pb\\.go$"
-    - ".*_generated\\.go$"
-
   # Go version to target
-  go: '1.25'
+  go: '1.24'
 
 # Output configuration
 output:
@@ -32,9 +22,6 @@ output:
 
   # Print linter name in the end of issue text
   print-linter-name: true
-
-  # Make issues output unique by line
-  uniq-by-line: true
 
   # Sort results by: filepath, line and column
   sort-results: true
@@ -89,11 +76,12 @@ linters-settings:
 
   # Settings for govet
   govet:
-    # Report about shadowed variables
-    check-shadowing: true
-
     # Enable all analyzers
     enable-all: true
+
+    # Enable shadow analyzer (replaces deprecated check-shadowing)
+    enable:
+      - shadow
 
   # Settings for goimports
   goimports:
@@ -209,6 +197,19 @@ linters-settings:
 issues:
   # List of regexps of issue texts to exclude
   exclude: []
+
+  # Make issues output unique by line
+  uniq-by-line: true
+
+  # Exclude specific directories (replaces deprecated run.skip-dirs)
+  exclude-dirs:
+    - vendor
+    - third_party
+
+  # Exclude specific file patterns (replaces deprecated run.skip-files)
+  exclude-files:
+    - ".*\\.pb\\.go$"
+    - ".*_generated\\.go$"
 
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
