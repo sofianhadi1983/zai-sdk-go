@@ -1,0 +1,48 @@
+# Agent Configuration
+# Copy this file to config.yaml and fill in your values
+
+# Your Z.ai API key (required)
+# Get your API key from:
+#   - International: https://docs.z.ai/
+#   - China: https://www.bigmodel.cn/
+api_key: "your-key.your-secret"
+
+# Base URL for the API (optional)
+# Defaults to: https://api.z.ai/api/coding/paas/v4
+# base_url: "https://api.z.ai/api/coding/paas/v4"
+
+# Advanced Features (optional)
+
+# Maximum number of messages to keep in conversation (default: 50)
+# Older messages are removed to prevent context overflow
+# max_messages: 50
+
+# Enable structured logging (default: false)
+# When enabled, logs tool executions and API calls
+# enable_logging: false
+
+# Log level: debug, info, error (default: info)
+# log_level: "info"
+
+# Save conversation history to file on exit (default: false)
+# Saves to conversation_history.json in current directory
+# save_conversation: false
+
+# UX Enhancements (optional)
+
+# Enable streaming responses (default: true)
+# Shows LLM responses as they're generated (more interactive)
+# enable_streaming: true
+
+# Enable color-coded output (default: true)
+# Uses colors to highlight different message types
+# enable_colors: true
+
+# Show progress indicators (default: true)
+# Displays spinner while waiting for LLM responses
+# show_progress: true
+
+# Typing speed in milliseconds (default: 30)
+# Controls how fast characters appear in streaming mode
+# Lower = faster, Higher = slower, 0 = instant
+# typing_speed_ms: 30
